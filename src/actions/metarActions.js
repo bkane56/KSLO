@@ -1,12 +1,20 @@
+import axios from 'axios';
 import getMetarInfo from '../services/metarService';
 export const UPDATE_METAR = 'UPDATE_METAR';
 export const FETCH_METAR = 'FETCH_METAR';
+import { X_API_KEY, WX_BASE_URL } from '../utils/constants'
+
 
 export function getMetarData(station, dataType) {
     console.log("In Action");
+    const wxURL = WX_BASE_URL + 'metar/' +  station;
+
     return {
         type: FETCH_METAR,
-        payload: getMetarInfo(station, dataType)
+        payload: axios.get(wxURL, {
+            headers: {"x-api-key":X_API_KEY}
+        })
+        // payload: getMetarInfo(station, dataType)
     };
 }
 

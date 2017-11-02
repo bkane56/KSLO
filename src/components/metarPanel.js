@@ -15,9 +15,10 @@ class MetarPanel extends Component {
 
     componentDidMount() {
         const station = "KSTL,KBLV";
+        debugger;
         const dataType = "METAR";
         console.log("in CDM" + getMetarData(station, dataType));
-        getMetarData(station, dataType)
+        this.props.getMetarData(station, dataType)
     }
 
     onSearchChange(event){
@@ -36,7 +37,9 @@ class MetarPanel extends Component {
         return(
             <div>
                 <p>BOB</p>
-                { this.props.metarText }
+                <div>
+                    { this.props.metarList }
+                </div>
                 {/*<MetarSearchBar*/}
                 {/*/>*/}
             </div>
@@ -44,10 +47,10 @@ class MetarPanel extends Component {
     }
 }
 
-function mapStateToProps(metar) {
-    const metarText = metar.data;
-    console.log("MSTP - metarText: " + metarText);
-    return  { metarText };
+function mapStateToProps(state) {
+    debugger;
+     const metarList = state.metar.data;
+    return  { metarList };
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,6 +1,6 @@
 import { UPDATE_METAR, FETCH_METAR } from '../actions/metarActions';
 
-const defaultState = {
+const defaultMetarState = {
     "status": "success",
     "data": [
         "KSLO 012155Z AUTO 13005KT 10SM OVC005 08/07 A2986 RMK AO2 T00810070",
@@ -8,14 +8,10 @@ const defaultState = {
     ]
 };
 
-export default function (state = defaultState , action) {
-    console.log("In Reducer" + defaultState);
+export default function metarReducer (state = defaultMetarState , action) {
     switch (action.type) {
         case FETCH_METAR:
-            return {
-                ...defaultState,
-                metarText: action.data
-            };
+            return action.payload.data;
 
         case UPDATE_METAR:
             return action.payload.data;
