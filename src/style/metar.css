@@ -1,0 +1,17 @@
+
+.checkwx-container {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #bdc3c7;
+}
+
+.checkwx-container .checkwx-item {
+    font-family: Tahoma, sans-serif;
+    font-size: 30px;
+    color: #3d566e;
+}
+
+.checkwx-container .checkwx-link {
+    color: #1e90ff;
+    text-decoration: underline;
+}
