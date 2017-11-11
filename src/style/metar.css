@@ -15,3 +15,17 @@
     color: #1e90ff;
     text-decoration: underline;
 }
+
+.headerMetar {
+    font-size: 16px;
+    color: black;
+}
+
+.headerCat {
+    font-size: 14px;
+    color: black;
+}
+
+#no-bullet-list {
+    list-style-type: none;
+}

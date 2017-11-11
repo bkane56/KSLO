@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Glyphicon, Col, Row } from 'react-bootstrap';
 import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
+import '../style/App.css';
 import BigCalendar from 'react-big-calendar';
 import Moment from 'moment';
-import Events from 'Events.jsx'; // https://github.com/jquense/react-big-calendar/blob/master/examples/events.js
+import { Events } from '../utils/events'
 
-export default class Planner extends React.Component {
+
+BigCalendar.setLocalizer(
+    BigCalendar.momentLocalizer(Moment)
+);
+
+export default class Planner extends Component {
     constructor(props, context)
     {
         super(props, context);
         this.context = context;
+        console.log("Events = " + Events)
         this.state = {events: Events};
-        BigCalendar.setLocalizer(
-            BigCalendar.momentLocalizer(Moment)
-        );
     }
 
     handleSelectSlot({start, end})
@@ -43,22 +47,24 @@ export default class Planner extends React.Component {
 
     render()
     {
-        return (<div>
-            <BigCalendar
-                selectable
-                popup
-                events={this.state.events}
-                onSelectSlot={this.handleSelectSlot.bind(this)}
-                onSelectEvent={this.handleSelectEvent.bind(this)}
-                defaultDate={new Date(2015, 3, 1)}
-                eventPropGetter={e => ({ className: 'test-class'})} /* Here you can define a style for the element */
-                components={{
-                    event: this.EventWeek,
-                    agenda: {
-                        event: this.EventAgenda
-                    }
-                }}
-            />
+        return (
+            <div className='Calendar'>
+                <BigCalendar
+                    selectable
+                    popup
+                    events={this.state.events}
+                    onSelectSlot={this.handleSelectSlot.bind(this)}
+                    onSelectEvent={this.handleSelectEvent.bind(this)}
+                    views={['month', 'week', 'day']}
+                    defaultDate={new Date(2017, 11, 1)}
+                    eventPropGetter={e => ({ className: 'test-class'})} /* Here you can define a style for the element */
+                    components={{
+                        event: this.EventWeek,
+                        agenda: {
+                            event: this.EventAgenda
+                        }
+                    }}
+                />
         </div>);
     }
 }

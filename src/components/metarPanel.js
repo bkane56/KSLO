@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators} from 'redux';
-import { getMetarData  } from '../actions/metarActions'
+import { getMetarData  } from '../actions/metarActions';
+import MetarList from './metarList';
 import MetarSearchBar from './metarSearchBar';
+
+import '../style/App.css';
 
 class MetarPanel extends Component {
     constructor(props) {
@@ -14,10 +17,8 @@ class MetarPanel extends Component {
     }
 
     componentDidMount() {
-        const station = "KSTL,KBLV";
-        debugger;
+        const station = "KSTL";
         const dataType = "METAR";
-        console.log("in CDM" + getMetarData(station, dataType));
         this.props.getMetarData(station, dataType)
     }
 
@@ -32,25 +33,20 @@ class MetarPanel extends Component {
     }
 
     render() {
-
-
+        const {data, metarFlightCategory} = this.props;
         return(
             <div>
-                <p>BOB</p>
-                <div>
-                    { this.props.metarList }
-                </div>
-                {/*<MetarSearchBar*/}
-                {/*/>*/}
-            </div>
+                <MetarList data = { data }/>
+                <p>{ metarFlightCategory}</p>
+           </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    debugger;
-     const metarList = state.metar.data;
-    return  { metarList };
+    const metarFlightCategory = state.metar.data[0].flight_category;
+    const data = state.metar.data;
+    return  { metarFlightCategory, data};
 }
 
 function mapDispatchToProps(dispatch) {

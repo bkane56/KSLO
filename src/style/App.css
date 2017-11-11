@@ -8,16 +8,36 @@
 }
 
 .App-header {
-  background-color: #252885;
-  height: 185px;
-  padding: 10px;
-  color: white;
-  font-size: 35px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #252885;
+    padding: 10px;
+    color: white;
+    font-size: 35px;
+}
+
+.App-header .vfr {
+    background-image: url("I:\\kslo\\src\\resources\\vfr.jpg");
+}
+
+.App-header .mvfr {
+    background-image: url("I:\\kslo\\src\\resources\\mvfr.jpg");
+}
+
+.App-header .ifr {
+    background-image: url("I:\\kslo\\src\\resources\\ifr.jpg");
 }
 
 .App-intro {
   padding-top: 25px;
   font-size: large;
+}
+
+.Calendar {
+  height: 580px;
+  padding: 30px;
+  border: black solid;
+  margin-top: 10px;
 }
 
 @keyframes App-logo-spin {
