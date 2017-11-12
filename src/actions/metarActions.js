@@ -13,8 +13,3 @@ export function getMetarData(station, dataType) {
         })
     };
 }
-
-
-
-
-

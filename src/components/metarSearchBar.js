@@ -40,5 +40,4 @@ class MetarSearchBar extends Component {
 
 }
 
-
 export default MetarSearchBar;
