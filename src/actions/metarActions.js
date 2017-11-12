@@ -1,5 +1,4 @@
 import axios from 'axios';
-import getMetarInfo from '../services/metarService';
 export const UPDATE_METAR = 'UPDATE_METAR';
 export const FETCH_METAR = 'FETCH_METAR';
 import { X_API_KEY, WX_METAR_URL } from '../utils/constants'

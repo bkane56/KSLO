@@ -9,7 +9,7 @@ import '../style/App.css';
 class Main extends Component {
 
     componentDidMount() {
-        const station = "KSLO";
+        const station = "KSTL";
         const dataType = "METAR";
         this.props.getMetarData(station, dataType)
     }

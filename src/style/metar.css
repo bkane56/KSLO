@@ -1,6 +1,7 @@
 
 .checkwx-container {
-    padding: 10px;
+    margin-top: 10px;
+    padding: 5px 5px;
     border-radius: 8px;
     background-color: #bdc3c7;
 }
