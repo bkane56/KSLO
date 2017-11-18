@@ -3,7 +3,7 @@ import { userService } from '../services';
 import { alertActions } from './';
 import { history } from '../helpers';
 
-const userActions = {
+export const userActions = {
   login,
   logout,
   register,
@@ -110,4 +110,3 @@ function _delete(id) {
   function failure(id, error) { return { type: userConstants.DELETE_FAILURE, id, error }; }
 }
 
-export default userActions;

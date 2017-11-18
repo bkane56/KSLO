@@ -16,18 +16,6 @@
     font-size: 35px;
 }
 
-.vfr {
-    background-image: url("../resources/vfr.jpg");
-}
-
-.mvfr {
-    background-image: url("../resources/mvfr.jpg");
-}
-
-.ifr {
-    background-image: url("../resources/ifr.jpg");
-}
-
 .App-intro {
   padding-top: 25px;
   font-size: large;

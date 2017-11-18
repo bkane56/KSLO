@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { metarConstants } from '../consatants';
 
-function getMetarData(station, dataType) {
+export default function getMetarData(station, dataType) {
   const wxURL = `${metarConstants.WX_METAR_URL + station}/decoded`;
   return {
     type: metarConstants.FETCH_METAR,
@@ -10,8 +10,3 @@ function getMetarData(station, dataType) {
     }),
   };
 }
-const metarActions = {
-  getMetarData,
-};
-
-export default metarActions;

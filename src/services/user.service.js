@@ -1,6 +1,6 @@
 import { authHeader } from '../helpers';
 
-const userService = {
+export const userService = {
   login,
   logout,
   register,
@@ -96,5 +96,3 @@ function handleResponse(response) {
 
   return response.json();
 }
-
-export default userService;

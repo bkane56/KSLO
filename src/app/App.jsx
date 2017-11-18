@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { history } from '../helpers';
 import { alertActions } from '../actions';
 import { PrivateRoute } from '../components';
-import { Main } from '../containers/main';
+import Main from '../containers/main';
 import { LoginPage } from '../components/login/loginPage';
 import { RegisterPage } from '../components/login/registerPage';
 

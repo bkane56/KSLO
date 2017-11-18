@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getMetarData } from '../actions/metar.actions';
+import getMetarData from '../actions/metar.actions';
 import Header from '../components/header';
 import Planner from '../components/planner';
 import '../style/App.css';
