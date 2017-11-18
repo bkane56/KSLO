@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
 import Moment from 'moment';
+import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../style/App.css';
 import '../style/calendar.css';
+
 import { Events } from '../resources/events';
 
 
