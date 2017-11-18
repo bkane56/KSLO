@@ -45,9 +45,7 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   const { alert } = state;
-  return {
-    alert,
-  };
+  return { alert };
 }
 
 const connectedApp = connect(mapStateToProps)(App);

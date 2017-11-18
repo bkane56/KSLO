@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Metar from './metar';
 
 export default function MetarList(props) {
@@ -13,7 +12,3 @@ export default function MetarList(props) {
     <ul id="no-bullet-list">{listItems}</ul>
   );
 }
-
-MetarList.propTypes = {
-  data: PropTypes.arrayOf().isRequired,
-};

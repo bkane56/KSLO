@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { metarActions } from '../actions';
@@ -42,22 +41,16 @@ class MetarPanel extends Component {
       </div>
     );
   }
-
-  MetarPanel.propTypes = {
-    data: PropTypes.object,
-    getMetarData: PropTypes.func,
-  };
 }
-
 
 function mapStateToProps(state) {
   const metarFlightCategory = state.metar.data[0].flight_category;
-  const data = state.metar.data;
+  const { data } = state.metar.data;
   return { metarFlightCategory, data };
 }
 
 function mapDispatchToProps(dispatch) {
-  const getMetarData = metarActions.getMetarData
+  const { getMetarData } = metarActions.getMetarData
   return bindActionCreators({ getMetarData }, dispatch);
 }
 

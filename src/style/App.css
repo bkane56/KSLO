@@ -17,15 +17,15 @@
 }
 
 .vfr {
-    background-image: url("L:\\dev\\applications\\Serious_attempts\\KSLO\\src\\resources\\vfr.jpg");
+    background-image: url("../resources/vfr.jpg");
 }
 
 .mvfr {
-    background-image: url("L:\\dev\\applications\\Serious_attempts\\KSLO\\src\\resources\\mvfr.jpg");
+    background-image: url("../resources/mvfr.jpg");
 }
 
 .ifr {
-    background-image: url("L:\\dev\\applications\\Serious_attempts\\KSLO\\src\\resources\\ifr.jpg");
+    background-image: url("../resources/ifr.jpg");
 }
 
 .App-intro {

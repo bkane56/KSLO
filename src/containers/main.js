@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import PropTypes from 'prop-types';
 import { getMetarData } from '../actions/metar.actions';
 import Header from '../components/header';
 import Planner from '../components/planner';
@@ -28,13 +27,6 @@ class Main extends Component {
     );
   }
 }
-
-Main.propTypes = {
-  metar: PropTypes.string(),
-  flightCategory: PropTypes.string(),
-  getMetarData: PropTypes.func,
-};
-
 
 function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;

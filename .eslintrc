@@ -5,6 +5,7 @@
   },
   "rules": {
     "prefer-rest-params": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "linebreak-style": ["off", "unix"]
   }
 }

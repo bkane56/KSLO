@@ -4,7 +4,7 @@ const combineLoaders = require('webpack-combine-loaders');
 
 const HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/index.html',
-  filename: '.index.html',
+  filename: 'index.html',
   inject: 'body',
 });
 
@@ -16,8 +16,9 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css'],
+    extensions: ['.js', '.jsx'],
   },
+  devtool: 'eval-source-map',
   module: {
     loaders: [
       {
@@ -60,14 +61,15 @@ module.exports = {
         test: /\.(jpe?g|png|gif|svg)$/i,
         loaders: [
           'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-          'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false'
-        ]
-      }
+          'image-webpack-loader?bypassOnDebug&optimizationLevel=7&interlaced=false',
+        ],
+      },
     ],
   },
   plugins: [HTMLWebpackPluginConfig],
   devServer: {
     port: 3030,
+    inline: true,
     historyApiFallback: true,
   },
 };
