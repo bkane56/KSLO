@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import getMetarData from '../actions/metar.actions';
+import { metarActions } from '../actions';
 import Header from '../components/header';
 import Planner from '../components/planner';
 import '../style/App.css';
@@ -35,6 +35,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
+  const getMetarData = metarActions.getMetarData;
   return bindActionCreators({ getMetarData }, dispatch);
 }
 

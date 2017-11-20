@@ -1,15 +1,14 @@
-import React from 'react';
 import axios from 'axios';
-import { X_API_KEY, WX_BASE_URL } from '../consatants/metar.constants';
+import { metarConstants } from '../consatants';
 
-const url = WX_BASE_URL;
+export const metarServices = {
+  getMetarInfo
+};
 
-export default function getMetarInfo(station, dataType) {
-  const wxURL = `${url + station}/decoded`;
-  axios.get(wxURL, {
-    headers: { 'x-api-key': X_API_KEY },
-  }).then(response => response).catch((err) => {
-    console.log(err);
+function getMetarInfo(station, dataType) {
+  const wxURL = `${metarConstants.WX_METAR_URL + station}/decoded`;
+  return axios.get(wxURL, {
+    headers: { 'x-api-key': metarConstants.X_API_KEY },
   });
 }
 

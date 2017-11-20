@@ -5,6 +5,7 @@ import registration from './registration.reducer';
 import users from './users.reducer';
 import alert from './alert.reducer';
 import metar from './metar.reducer';
+import events from './events.reducer';
 
 const rootReducer = combineReducers({
   authentication,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   users,
   alert,
   metar,
+  events,
 });
 
 export default rootReducer;

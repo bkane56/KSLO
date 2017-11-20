@@ -1,12 +1,13 @@
-import axios from 'axios';
 import { metarConstants } from '../consatants';
+import { metarServices } from '../services';
 
-export default function getMetarData(station, dataType) {
-  const wxURL = `${metarConstants.WX_METAR_URL + station}/decoded`;
+function getMetarData(station, dataType) {
   return {
     type: metarConstants.FETCH_METAR,
-    payload: axios.get(wxURL, {
-      headers: { 'x-api-key': metarConstants.X_API_KEY },
-    }),
+    payload: metarServices.getMetarInfo(station),
   };
 }
+
+export const metarActions = {
+  getMetarData,
+};

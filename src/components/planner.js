@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
 import Moment from 'moment';
+import { connect } from 'react-redux';
 import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../style/App.css';
 import '../style/calendar.css';
@@ -10,7 +11,7 @@ import { Events } from '../resources/events';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
 
-export default class Planner extends Component {
+class Planner extends Component {
   constructor(props, context) {
     super(props, context);
     this.context = context;
@@ -19,9 +20,9 @@ export default class Planner extends Component {
     this.state = { events: Events };
   }
 
-  handleSelectSlot({ start, end }) {
+  handleSelectSlot({ start, end}) {
     // create an event with title "Test"
-    this.state.events.push({ start, end, title: 'Test' });
+    this.state.events.push({ start, end, title: this.props.name });
     this.setState({});
   }
 
@@ -60,3 +61,11 @@ export default class Planner extends Component {
       </div>);
   }
 }
+
+function mapStateToProps(state) {
+  const { lastName, firstName } = state.authentication.user;
+  const name = `${lastName}, ${firstName}`;
+  return { lastName, firstName, name };
+}
+
+export default connect(mapStateToProps)(Planner);
