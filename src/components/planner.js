@@ -3,6 +3,8 @@ import BigCalendar from 'react-big-calendar';
 import Moment from 'moment';
 import { connect } from 'react-redux';
 import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
+import HeaderMetar from '../components/headerMetar';
+import NavBar from '../components/navBar';
 import '../style/App.css';
 import '../style/calendar.css';
 
@@ -17,7 +19,10 @@ class Planner extends Component {
     this.context = context;
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
-    this.state = { events: Events };
+    this.state = {
+      events: Events,
+      currentDate: Moment().format('YYYY,MM,DD'),
+    };
   }
 
   handleSelectSlot({ start, end}) {
@@ -40,32 +45,43 @@ class Planner extends Component {
   }
 
   render() {
+    const { metar, flightCategory } = this.props;
     return (
-      <div className="Calendar">
-        <BigCalendar
-          selectable
-          popup
-          events={this.state.events}
-          onSelectSlot={this.handleSelectSlot}
-          onSelectEvent={this.handleSelectEvent}
-          views={['month', 'week', 'day']}
-          defaultDate={new Date(2017, 11, 1)}
-          eventPropGetter={e => ({ className: 'test-class' })} /* Here you can define a style for the element */
-          components={{
-                        event: this.EventWeek,
-                        agenda: {
-                            event: this.EventAgenda,
-                        },
-                    }}
+      <div>
+        <NavBar />
+        <HeaderMetar
+          metar={metar}
+          flightCategory={flightCategory}
         />
-      </div>);
+        <div className="Calendar">
+          <BigCalendar
+            selectable
+            popup
+            events={this.state.events}
+            onSelectSlot={this.handleSelectSlot}
+            onSelectEvent={this.handleSelectEvent}
+            views={['month', 'week', 'day']}
+            defaultDate={new Date(this.state.currentDate)}
+            eventPropGetter={e => ({ className: 'test-class' })} /* Here you can define a style for the element */
+            components={{
+                event: this.EventWeek,
+                agenda: {
+                    event: this.EventAgenda,
+                },
+            }}
+          />
+        </div>
+      </div>
+    );
   }
 }
 
 function mapStateToProps(state) {
+  const flightCategory = state.metar.data[0].flight_category;
+  const metar = state.metar.data[0].raw_text;
   const { lastName, firstName } = state.authentication.user;
   const name = `${lastName}, ${firstName}`;
-  return { lastName, firstName, name };
+  return { lastName, firstName, name, flightCategory, metar };
 }
 
 export default connect(mapStateToProps)(Planner);

@@ -8,19 +8,15 @@ import '../style/App.css';
 
 class Main extends Component {
   componentDidMount() {
-    const station = 'KSTL';
+    const station = 'KSLO';
     const dataType = 'METAR';
     this.props.getMetarData(station, dataType);
   }
 
   render() {
-    const { metar, flightCategory } = this.props;
     return (
       <div className="App">
-        <Header
-          metar={metar}
-          flightCategory={flightCategory}
-        />
+        <Header />
         <Planner />
       </div>
 
@@ -29,13 +25,12 @@ class Main extends Component {
 }
 
 function mapStateToProps(state) {
-  const flightCategory = state.metar.data[0].flight_category;
-  const metar = state.metar.data[0].raw_text;
-  return { flightCategory, metar };
+
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {
-  const getMetarData = metarActions.getMetarData;
+  const { getMetarData } = metarActions;
   return bindActionCreators({ getMetarData }, dispatch);
 }
 

@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: #c4e3f3;
 }
 
 .App-logo {
@@ -8,6 +9,7 @@
 }
 
 .App-header {
+    background-image: url("../resources/vfr.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-color: #252885;
@@ -24,4 +26,8 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+.container {
+    width: 100%;
+
 }

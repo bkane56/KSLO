@@ -1,0 +1,16 @@
+.navbar .container-fluid>.navbar-header {
+    float: left;
+    margin-right: 10px;
+    width: 100%;
+}
+.navbar .navbar-nav {
+    float: left;
+    margin: 5px;
+}
+.nav>li {
+    float: left;
+}
+.navbar-header {
+    background-color: #adadad ;
+    border-radius: 8px;
+}

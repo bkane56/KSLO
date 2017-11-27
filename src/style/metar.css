@@ -2,12 +2,13 @@
     margin-top: 10px;
     padding: 5px 5px;
     border-radius: 8px;
-    background-color: #bdc3c7;
+    font-size: small;
+    background: #bdc3c7;
 }
 
 .checkwx-item {
     font-family: Tahoma, sans-serif;
-    font-size: 10px;
+    font-size: 15px;
     color: #3d566e;
 }
 
@@ -24,6 +25,11 @@
 .headerCat {
     font-size: 14px;
     color: black;
+}
+
+.jumbotron {
+    background-image: url('../resources/vfr.jpg');
+    background-repeat: no-repeat;
 }
 
 #no-bullet-list {
