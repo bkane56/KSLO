@@ -3,4 +3,23 @@
     padding: 30px;
     border: black solid;
     margin-top: 10px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: transparent;
+}
+
+.IFR {
+    background-image: url("../resources/ifr.jpg");
+}
+
+.MVFR {
+    background-image: url("../resources/mvfr.jpg");
+}
+
+.VFR {
+    background-image: url("../resources/vfr.jpg");
+}
+
+.transparent{
+    background:rgba(255,255,255,0.5);
 }

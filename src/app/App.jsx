@@ -22,9 +22,11 @@ class App extends React.Component {
 
   render() {
     const { alert } = this.props;
+    const appClass = `App ${this.props.flightCategory}`;
     return (
+      <div className={appClass}>
         <div className="container">
-          <div className="col-sm-8 col-sm-offset-2">
+          <div className="col-sm-10 col-sm-offset-1">
             {alert.message &&
             <div className={`alert ${alert.type}`}>{alert.message}</div>
             }
@@ -37,13 +39,15 @@ class App extends React.Component {
             </Router>
           </div>
         </div>
+      </div>
     );
   }
 }
 
 function mapStateToProps(state) {
   const { alert } = state;
-  return { alert };
+  const flightCategory = state.metar.data[0].flight_category;
+  return { alert, flightCategory };
 }
 
 const connectedApp = connect(mapStateToProps)(App);

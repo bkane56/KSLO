@@ -4,7 +4,6 @@ import Moment from 'moment';
 import { connect } from 'react-redux';
 import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import HeaderMetar from '../components/headerMetar';
-import NavBar from '../components/navBar';
 import '../style/App.css';
 import '../style/calendar.css';
 
@@ -19,21 +18,25 @@ class Planner extends Component {
     this.context = context;
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
+    this.getCurrentDate = this.getCurrentDate.bind(this);
     this.state = {
       events: Events,
-      currentDate: Moment().format('YYYY,MM,DD'),
     };
   }
 
-  handleSelectSlot({ start, end}) {
-    // create an event with title "Test"
-    this.state.events.push({ start, end, title: this.props.name });
-    this.setState({});
+  getCurrentDate() {
+    return Moment().format('YYYY,MM,DD');
   }
 
   handleSelectEvent() {
     // just for example
     console.log(`handleSelectEvent: ${JSON.stringify(arguments)}`);
+  }
+
+  handleSelectSlot({ start, end }) {
+    // create an event with title "Test"
+    this.state.events.push({ start, end, title: this.props.name });
+    this.setState({});
   }
 
   EventWeek(props) {
@@ -44,16 +47,17 @@ class Planner extends Component {
     return <em>{props.event.title}</em>;
   }
 
+
   render() {
     const { metar, flightCategory } = this.props;
+    const calendarClass = `Calendar ${flightCategory}`;
     return (
       <div>
-        <NavBar />
         <HeaderMetar
           metar={metar}
           flightCategory={flightCategory}
         />
-        <div className="Calendar">
+        <div className="Calendar transparent">
           <BigCalendar
             selectable
             popup
@@ -61,7 +65,7 @@ class Planner extends Component {
             onSelectSlot={this.handleSelectSlot}
             onSelectEvent={this.handleSelectEvent}
             views={['month', 'week', 'day']}
-            defaultDate={new Date(this.state.currentDate)}
+            defaultDate={new Date(this.getCurrentDate())}
             eventPropGetter={e => ({ className: 'test-class' })} /* Here you can define a style for the element */
             components={{
                 event: this.EventWeek,
@@ -81,7 +85,9 @@ function mapStateToProps(state) {
   const metar = state.metar.data[0].raw_text;
   const { lastName, firstName } = state.authentication.user;
   const name = `${lastName}, ${firstName}`;
-  return { lastName, firstName, name, flightCategory, metar };
+  return {
+    lastName, firstName, name, flightCategory, metar,
+  };
 }
 
 export default connect(mapStateToProps)(Planner);

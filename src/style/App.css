@@ -1,6 +1,8 @@
 .App {
   text-align: center;
-  background-color: #c4e3f3;
+  background-color: transparent;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .App-logo {
@@ -9,10 +11,9 @@
 }
 
 .App-header {
-    background-image: url("../resources/vfr.jpg");
     background-size: cover;
     background-repeat: no-repeat;
-    background-color: #252885;
+    background-color: transparent;
     padding: 10px;
     color: white;
     border-radius: 8px;
@@ -29,5 +30,16 @@
 }
 .container {
     width: 100%;
+}
 
+.IFR {
+    background-image: url("../resources/ifr.jpg");
+}
+
+.MVFR {
+    background-image: url("../resources/mvfr.jpg");
+}
+
+.VFR {
+    background-image: url("../resources/vfr.jpg");
 }

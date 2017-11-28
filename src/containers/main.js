@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { metarActions } from '../actions';
+import NavBar from '../components/navBar';
 import Header from '../components/header';
 import Planner from '../components/planner';
 import '../style/App.css';
@@ -14,9 +15,13 @@ class Main extends Component {
   }
 
   render() {
+    const { flightCategory } = this.props;
     return (
       <div className="App">
-        <Header />
+        <NavBar />
+        <Header
+          flightCategory={ flightCategory }
+        />
         <Planner />
       </div>
 
@@ -25,8 +30,8 @@ class Main extends Component {
 }
 
 function mapStateToProps(state) {
-
-  return {};
+  const flightCategory = state.metar.data[0].flight_category;
+  return { flightCategory };
 }
 
 function mapDispatchToProps(dispatch) {
