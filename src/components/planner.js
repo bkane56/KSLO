@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
+import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { connect } from 'react-redux';
+import Notifications, { notify } from 'react-notify-toast';
 import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import HeaderMetar from '../components/headerMetar';
 import '../style/App.css';
 import '../style/calendar.css';
 
 import { Events } from '../resources/events';
+import events from '../reducers/events.reducer';
 
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
@@ -28,9 +31,11 @@ class Planner extends Component {
     return Moment().format('YYYY,MM,DD');
   }
 
-  handleSelectEvent() {
+  handleSelectEvent(props) {
     // just for example
-    console.log(`handleSelectEvent: ${JSON.stringify(arguments)}`);
+    // console.log(`handleSelectEvent: ${JSON.stringify(arguments)}`);
+    const myColor = { background: '#252885', text: '#2678FF' };
+    notify.show("this is sample text", "custom", 5000, myColor);
   }
 
   handleSelectSlot({ start, end }) {
@@ -47,10 +52,8 @@ class Planner extends Component {
     return <em>{props.event.title}</em>;
   }
 
-
   render() {
     const { metar, flightCategory } = this.props;
-    const calendarClass = `Calendar ${flightCategory}`;
     return (
       <div>
         <HeaderMetar
@@ -58,6 +61,7 @@ class Planner extends Component {
           flightCategory={flightCategory}
         />
         <div className="Calendar transparent">
+          <Notifications />
           <BigCalendar
             selectable
             popup
@@ -79,6 +83,16 @@ class Planner extends Component {
     );
   }
 }
+
+Planner.defaultProps = {
+  metar: '',
+  flightCategory: '',
+};
+
+Planner.propTypes = {
+  metar: PropTypes.string,
+  flightCategory: PropTypes.string,
+};
 
 function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;
