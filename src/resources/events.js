@@ -30,8 +30,8 @@ export const Events = [
   },
   {
     title: 'Conference',
-    start: new Date(2017, 11, 11),
-    end: new Date(2017, 11, 13),
+    start: new Date(2018, 0, 11),
+    end: new Date(2018, 0, 12,10),
     desc: 'Big conference for important people',
   },
   {
