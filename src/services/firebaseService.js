@@ -1,15 +1,15 @@
 import Moment from 'moment/moment';
 import { eventsConstants } from '../consatants';
+import fire from '../utils/fire';
 
 
 export const firebaseService = {
   saveEvent,
 };
 
-function saveEvent(db, slot, title, nNumber) {
+function saveEvent(slot, title, nNumber) {
   // create an event with title "Test"
-  const dbCon = db.database().ref(`/events/${nNumber}`);
-  dbCon.push({
+  fire.database().ref(`/events/${nNumber}`).push({
     start: Moment(slot.start).format(eventsConstants.DATE_FORMAT),
     end: Moment(slot.end).format(eventsConstants.DATE_FORMAT),
     allDay: false,

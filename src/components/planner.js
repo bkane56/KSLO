@@ -3,15 +3,14 @@ import BigCalendar from 'react-big-calendar';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Notifications, { notify } from 'react-notify-toast';
 import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import HeaderMetar from '../components/headerMetar';
-import { firebaseService } from '../services';
 import '../style/App.css';
 import '../style/calendar.css';
-import { eventsConstants } from '../consatants';
 import { Events } from '../resources/events';
-import events from '../reducers/events.reducer';
+import { eventActions } from '../actions';
 
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
@@ -32,7 +31,6 @@ class Planner extends Component {
   constructor(props, context) {
     super(props, context);
     this.context = context;
-    this.db = props.db;
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
     this.handlesetEventColor = this.handlesetEventColor.bind(this);
@@ -62,7 +60,7 @@ class Planner extends Component {
     if (Moment(eventStart).isAfter(Moment())) {
       const title = this.props.name;
       const desc = 'solo';
-      firebaseService.saveEvent(this.db, slot, title, nNumber);
+      this.props.addEvents(slot, title, nNumber);
       this.state.events.push({
         start,
         end,
@@ -112,8 +110,8 @@ Planner.defaultProps = {
   metar: '',
   flightCategory: '',
   name: '',
-  db: {},
   cfiRequired: true,
+  addEvents() {},
 };
 
 Planner.propTypes = {
@@ -121,8 +119,13 @@ Planner.propTypes = {
   flightCategory: PropTypes.string,
   name: PropTypes.string,
   cfiRequired: PropTypes.bool,
-  db: PropTypes.object,
+  addEvents: PropTypes.func,
 };
+
+function mapDispatchToProps(dispatch) {
+  const { getEvents, addEvents } = eventActions;
+  return bindActionCreators({ getEvents, addEvents }, dispatch);
+}
 
 function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;
@@ -134,4 +137,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Planner);
+export default connect(mapStateToProps, mapDispatchToProps)(Planner);

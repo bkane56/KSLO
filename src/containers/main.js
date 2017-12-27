@@ -11,20 +11,6 @@ import Planner from '../components/planner';
 import '../style/App.css';
 
 class Main extends Component {
-  constructor(props) {
-    super(props);
-
-    // Initialize Firebase
-    const config = {
-      apiKey: firebaseConstants.API_KEY,
-      authDomain: firebaseConstants.AUTH_DOMAIN,
-      databaseURL: firebaseConstants.DATABASE_URL,
-      projectId: firebaseConstants.PROJECT_ID,
-      storageBucket: firebaseConstants.STORAGE_BUCKET,
-      messagingSenderId: firebaseConstants.MESSAGE_SENDER_ID,
-    };
-    firebase.initializeApp(config);
-  }
 
   componentDidMount() {
     const station = 'KSLO';
@@ -40,9 +26,7 @@ class Main extends Component {
         <Header
           flightCategory={flightCategory}
         />
-        <Planner
-          db={firebase}
-        />
+        <Planner />
       </div>
 
     );

@@ -1,9 +1,21 @@
 import { eventsConstants } from '../consatants';
-import { eventsServices } from '../services';
+import { eventsServices, firebaseService } from '../services';
 
-export default function getEvents() {
+function getEvents() {
   return {
     type: eventsConstants.FETCH_EVENTS,
     payload: eventsServices.getEvents(),
   };
 }
+
+function addEvents(slot, title, nNumber) {
+  return {
+    type: eventsConstants.ADD_EVENTS,
+    payload: firebaseService.saveEvent(slot, title, nNumber),
+  };
+}
+
+export const eventActions = {
+  getEvents,
+  addEvents,
+};
