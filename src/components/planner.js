@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Notifications, { notify } from 'react-notify-toast';
 import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import HeaderMetar from '../components/headerMetar';
+import { firebaseService} from '../services';
 import '../style/App.css';
 import '../style/calendar.css';
 import { eventsConstants } from '../consatants';
@@ -19,6 +20,7 @@ class Planner extends Component {
   constructor(props, context) {
     super(props, context);
     this.context = context;
+    this.db = props.db;
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
     this.getCurrentDate = this.getCurrentDate.bind(this);
@@ -39,17 +41,17 @@ class Planner extends Component {
   }
 
   handleSelectSlot(slot) {
-    // create an event with title "Test"
-    const dbCon = this.props.db.database().ref('/events');
-    dbCon.push({
-      event: {
-        start: Moment(slot.start).format(eventsConstants.DATE_FORMAT),
-        end: Moment(slot.end).format(eventsConstants.DATE_FORMAT),
-        title: this.props.name,
-        desc: 'solo',
-      },
-    });
-    this.setState({});
+    const eventStart = Moment(slot.start).format();
+    if (Moment(eventStart).isAfter(Moment())) {
+      const title = this.props.name;
+      firebaseService.saveEvent(this.db, slot, title);
+      this.state.events.push({
+        start,
+        end,
+        title,
+      });
+      this.setState({});
+    }
   }
 
   EventWeek(props) {
@@ -74,7 +76,7 @@ class Planner extends Component {
             selectable
             popup
             events={this.state.events}
-            onSelectSlot={(slot) => this.handleSelectSlot(slot)}
+            onSelectSlot={(slot, start, end) => this.handleSelectSlot(slot, start, end)}
             onSelectEvent={this.handleSelectEvent}
             min={new Date('2017, 1, 7, 06:00')}
             max={new Date('2017, 1, 7, 23:59')}
