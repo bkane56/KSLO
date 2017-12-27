@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Notifications, { notify } from 'react-notify-toast';
 import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import HeaderMetar from '../components/headerMetar';
-import { firebaseService} from '../services';
+import { firebaseService } from '../services';
 import '../style/App.css';
 import '../style/calendar.css';
 import { eventsConstants } from '../consatants';
@@ -17,20 +17,36 @@ import events from '../reducers/events.reducer';
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
 
 class Planner extends Component {
+  static getCurrentDate() {
+    return Moment().format('YYYY,MM,DD');
+  }
+
+  static EventWeek(props) {
+    return <strong>{props.event.title}</strong>;
+  }
+
+  static EventAgenda(props) {
+    return <em>{props.event.title}</em>;
+  }
+
   constructor(props, context) {
     super(props, context);
     this.context = context;
     this.db = props.db;
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
-    this.getCurrentDate = this.getCurrentDate.bind(this);
+    this.handlesetEventColor = this.handlesetEventColor.bind(this);
+    Planner.getCurrentDate = Planner.getCurrentDate.bind(this);
     this.state = {
       events: Events,
     };
   }
 
-  getCurrentDate() {
-    return Moment().format('YYYY,MM,DD');
+  handlesetEventColor() {
+    if (this.props.cfiRequired) {
+      return 'cfiRequired';
+    }
+    return 'test-class';
   }
 
   handleSelectEvent() {
@@ -42,24 +58,19 @@ class Planner extends Component {
 
   handleSelectSlot(slot) {
     const eventStart = Moment(slot.start).format();
+    const nNumber = 'N4SW';
     if (Moment(eventStart).isAfter(Moment())) {
       const title = this.props.name;
-      firebaseService.saveEvent(this.db, slot, title);
+      const desc = 'solo';
+      firebaseService.saveEvent(this.db, slot, title, nNumber);
       this.state.events.push({
         start,
         end,
         title,
+        desc,
       });
       this.setState({});
     }
-  }
-
-  EventWeek(props) {
-    return <strong>{props.event.title}</strong>;
-  }
-
-  EventAgenda(props) {
-    return <em>{props.event.title}</em>;
   }
 
   render() {
@@ -82,12 +93,12 @@ class Planner extends Component {
             max={new Date('2017, 1, 7, 23:59')}
             views={['month', 'week', 'day']}
             defaultView="week"
-            defaultDate={new Date(this.getCurrentDate())}
-            eventPropGetter={e => ({ className: 'test-class' })} /* Here you can define a style for the element */
+            defaultDate={new Date(Planner.getCurrentDate())}
+            eventPropGetter={e => ({ className: this.handlesetEventColor() })} /* Here you can define a style for the element */
             components={{
-                event: this.EventWeek,
+                event: Planner.EventWeek,
                 agenda: {
-                    event: this.EventAgenda,
+                    event: Planner.EventAgenda,
                 },
             }}
           />
@@ -100,11 +111,17 @@ class Planner extends Component {
 Planner.defaultProps = {
   metar: '',
   flightCategory: '',
+  name: '',
+  db: {},
+  cfiRequired: true,
 };
 
 Planner.propTypes = {
   metar: PropTypes.string,
   flightCategory: PropTypes.string,
+  name: PropTypes.string,
+  cfiRequired: PropTypes.bool,
+  db: PropTypes.object,
 };
 
 function mapStateToProps(state) {

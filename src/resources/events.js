@@ -59,8 +59,8 @@ export const Events = [
   },
   {
     title: 'Dinner',
-    start: new Date(2017, 11, 12, 20, 0, 0, 0),
-    end: new Date(2017, 11, 12, 21, 0, 0, 0),
+    start: new Date(2017, 11, 30, 20, 0, 0, 0),
+    end: new Date(2017, 11, 30, 21, 0, 0, 0),
   },
   {
     title: 'Birthday Party',
