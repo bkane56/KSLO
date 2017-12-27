@@ -26,7 +26,8 @@ export function configureFakeBackend() {
               username: user.username,
               firstName: user.firstName,
               lastName: user.lastName,
-              token: 'fake-jwt-token'
+              cfiRequired: user.cfiRequired,
+              token: 'fake-jwt-token',
             };
             resolve({ok: true, json: () => responseJson});
           } else {

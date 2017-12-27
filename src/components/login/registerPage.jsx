@@ -14,6 +14,7 @@ class RegisterPage extends React.Component {
         lastName: '',
         username: '',
         password: '',
+        cfiRequired: true,
       },
       submitted: false,
     };

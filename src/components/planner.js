@@ -31,11 +31,11 @@ class Planner extends Component {
     return Moment().format('YYYY,MM,DD');
   }
 
-  handleSelectEvent(props) {
+  handleSelectEvent() {
     // just for example
     // console.log(`handleSelectEvent: ${JSON.stringify(arguments)}`);
     const myColor = { background: '#252885', text: '#2678FF' };
-    notify.show("this is sample text", "custom", 5000, myColor);
+    notify.show(this.props.name, "custom", 5000, myColor);
   }
 
   handleSelectSlot({ start, end }) {
@@ -68,7 +68,10 @@ class Planner extends Component {
             events={this.state.events}
             onSelectSlot={this.handleSelectSlot}
             onSelectEvent={this.handleSelectEvent}
+            min={new Date('2017, 1, 7, 06:00')}
+            max={new Date('2017, 1, 7, 23:59')}
             views={['month', 'week', 'day']}
+            defaultView='week'
             defaultDate={new Date(this.getCurrentDate())}
             eventPropGetter={e => ({ className: 'test-class' })} /* Here you can define a style for the element */
             components={{
@@ -97,10 +100,10 @@ Planner.propTypes = {
 function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;
   const metar = state.metar.data[0].raw_text;
-  const { lastName, firstName } = state.authentication.user;
+  const { lastName, firstName, cfiRequired } = state.authentication.user;
   const name = `${lastName}, ${firstName}`;
   return {
-    lastName, firstName, name, flightCategory, metar,
+    lastName, firstName, cfiRequired, name, flightCategory, metar,
   };
 }
 
