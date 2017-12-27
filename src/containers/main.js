@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import firebase from 'firebase';
+
+import { firebaseConstants } from '../consatants';
 import { metarActions } from '../actions';
 import NavBar from '../components/navBar';
 import Header from '../components/header';
@@ -8,6 +11,21 @@ import Planner from '../components/planner';
 import '../style/App.css';
 
 class Main extends Component {
+  constructor(props) {
+    super(props);
+
+    // Initialize Firebase
+    const config = {
+      apiKey: firebaseConstants.API_KEY,
+      authDomain: firebaseConstants.AUTH_DOMAIN,
+      databaseURL: firebaseConstants.DATABASE_URL,
+      projectId: firebaseConstants.PROJECT_ID,
+      storageBucket: firebaseConstants.STORAGE_BUCKET,
+      messagingSenderId: firebaseConstants.MESSAGE_SENDER_ID,
+    };
+    firebase.initializeApp(config);
+  }
+
   componentDidMount() {
     const station = 'KSLO';
     const dataType = 'METAR';
@@ -20,9 +38,11 @@ class Main extends Component {
       <div className="App">
         <NavBar />
         <Header
-          flightCategory={ flightCategory }
+          flightCategory={flightCategory}
         />
-        <Planner />
+        <Planner
+          db={firebase}
+        />
       </div>
 
     );

@@ -8,7 +8,7 @@ import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import HeaderMetar from '../components/headerMetar';
 import '../style/App.css';
 import '../style/calendar.css';
-
+import { eventsConstants } from '../consatants';
 import { Events } from '../resources/events';
 import events from '../reducers/events.reducer';
 
@@ -35,12 +35,20 @@ class Planner extends Component {
     // just for example
     // console.log(`handleSelectEvent: ${JSON.stringify(arguments)}`);
     const myColor = { background: '#252885', text: '#2678FF' };
-    notify.show(this.props.name, "custom", 5000, myColor);
+    notify.show(this.props.name, 'custom', 5000, myColor);
   }
 
-  handleSelectSlot({ start, end }) {
+  handleSelectSlot(slot) {
     // create an event with title "Test"
-    this.state.events.push({ start, end, title: this.props.name });
+    const dbCon = this.props.db.database().ref('/events');
+    dbCon.push({
+      event: {
+        start: Moment(slot.start).format(eventsConstants.DATE_FORMAT),
+        end: Moment(slot.end).format(eventsConstants.DATE_FORMAT),
+        title: this.props.name,
+        desc: 'solo',
+      },
+    });
     this.setState({});
   }
 
@@ -66,12 +74,12 @@ class Planner extends Component {
             selectable
             popup
             events={this.state.events}
-            onSelectSlot={this.handleSelectSlot}
+            onSelectSlot={(slot) => this.handleSelectSlot(slot)}
             onSelectEvent={this.handleSelectEvent}
             min={new Date('2017, 1, 7, 06:00')}
             max={new Date('2017, 1, 7, 23:59')}
             views={['month', 'week', 'day']}
-            defaultView='week'
+            defaultView="week"
             defaultDate={new Date(this.getCurrentDate())}
             eventPropGetter={e => ({ className: 'test-class' })} /* Here you can define a style for the element */
             components={{

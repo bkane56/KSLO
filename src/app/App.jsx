@@ -2,12 +2,14 @@ import React from 'react';
 import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+
 import { history } from '../helpers';
 import { alertActions } from '../actions';
 import { PrivateRoute } from '../components';
 import Main from '../containers/main';
 import { LoginPage } from '../components/login/loginPage';
 import { RegisterPage } from '../components/login/registerPage';
+import { firebaseConstants } from '../consatants';
 
 class App extends React.Component {
   constructor(props) {

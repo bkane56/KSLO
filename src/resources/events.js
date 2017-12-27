@@ -31,7 +31,7 @@ export const Events = [
   {
     title: 'Conference',
     start: new Date(2018, 0, 11),
-    end: new Date(2018, 0, 12,10),
+    end: new Date(2018, 0, 12, 10),
     desc: 'Big conference for important people',
   },
   {
