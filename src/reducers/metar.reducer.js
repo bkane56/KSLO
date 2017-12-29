@@ -1,6 +1,9 @@
 import { metarConstants } from '../consatants';
 
 const defaultMetarState = {
+  isPending: false,
+  isFulfilled: false,
+  isError: false,
   results: null,
   data: [
     {
@@ -58,8 +61,21 @@ const defaultMetarState = {
 
 export default function metar(state = defaultMetarState, action) {
   switch (action.type) {
-    case metarConstants.FETCH_METAR:
-      return action.payload.data;
+    case metarConstants.FETCH_METAR_PENDING:
+      return {
+        ...state,
+        isFulfilled: false,
+        isPending: true,
+      };
+
+    case metarConstants.FETCH_METAR_FULFILLED:
+      return {
+        ...state,
+        isFulfilled: true,
+        isPending: false,
+        data: action.payload.data.data,
+      };
+
 
     case metarConstants.UPDATE_METAR:
       return action.payload.data;

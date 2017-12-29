@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import firebase from 'firebase';
 
 import { firebaseConstants } from '../consatants';
 import { metarActions } from '../actions';
@@ -11,11 +10,10 @@ import Planner from '../components/planner';
 import '../style/App.css';
 
 class Main extends Component {
-
   componentDidMount() {
     const station = 'KSLO';
     const dataType = 'METAR';
-    // this.props.getMetarData(station, dataType);
+    this.props.getMetarData(station, dataType);
   }
 
   render() {
