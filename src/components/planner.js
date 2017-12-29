@@ -15,6 +15,8 @@ import { eventActions } from '../actions';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
 
+
+
 class Planner extends Component {
   static getCurrentDate() {
     return Moment().format('YYYY,MM,DD');
@@ -33,14 +35,18 @@ class Planner extends Component {
     this.context = context;
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
-    this.handlesetEventColor = this.handlesetEventColor.bind(this);
+    this.handleSetEventColor = this.handleSetEventColor.bind(this);
     Planner.getCurrentDate = Planner.getCurrentDate.bind(this);
-    this.state = {
-      events: Events,
-    };
+    // this.state = {
+    //   events: Events,
+    // };
   }
 
-  handlesetEventColor() {
+  componentWillMount() {
+    this.props.getEvents('N4SW');
+  }
+
+  handleSetEventColor() {
     if (this.props.cfiRequired) {
       return 'cfiRequired';
     }
@@ -64,15 +70,15 @@ class Planner extends Component {
       this.state.events.push({
         start,
         end,
-        title,
-        desc,
+        title: this.props.name,
       });
       this.setState({});
     }
   }
 
   render() {
-    const { metar, flightCategory } = this.props;
+    const { metar, flightCategory, events} = this.props;
+    console.log('events into calendar', events)
     return (
       <div>
         <HeaderMetar
@@ -84,15 +90,15 @@ class Planner extends Component {
           <BigCalendar
             selectable
             popup
-            events={this.state.events}
-            onSelectSlot={(slot, start, end) => this.handleSelectSlot(slot, start, end)}
+            events={events}
+            onSelectSlot={(slot) => this.handleSelectSlot(slot)}
             onSelectEvent={this.handleSelectEvent}
             min={new Date('2017, 1, 7, 06:00')}
             max={new Date('2017, 1, 7, 23:59')}
             views={['month', 'week', 'day']}
             defaultView="week"
             defaultDate={new Date(Planner.getCurrentDate())}
-            eventPropGetter={e => ({ className: this.handlesetEventColor() })} /* Here you can define a style for the element */
+            eventPropGetter={e => ({ className: 'test-class' })} /* Here you can define a style for the element */
             components={{
                 event: Planner.EventWeek,
                 agenda: {
@@ -131,9 +137,11 @@ function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;
   const metar = state.metar.data[0].raw_text;
   const { lastName, firstName, cfiRequired } = state.authentication.user;
+  const eventObject = state.events.events;
+  const events = Object.values(eventObject)
   const name = `${lastName}, ${firstName}`;
   return {
-    lastName, firstName, cfiRequired, name, flightCategory, metar,
+    lastName, firstName, cfiRequired, name, flightCategory, metar, events,
   };
 }
 

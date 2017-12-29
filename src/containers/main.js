@@ -15,7 +15,7 @@ class Main extends Component {
   componentDidMount() {
     const station = 'KSLO';
     const dataType = 'METAR';
-    this.props.getMetarData(station, dataType);
+    // this.props.getMetarData(station, dataType);
   }
 
   render() {
