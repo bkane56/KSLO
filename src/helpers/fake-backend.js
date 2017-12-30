@@ -1,27 +1,24 @@
 // array in local storage for registered users
-let users = JSON.parse(localStorage.getItem('users')) || [];
+const users = JSON.parse(localStorage.getItem('users')) || [];
 
 export function configureFakeBackend() {
-  let realFetch = window.fetch;
+  const realFetch = window.fetch;
   window.fetch = function (url, opts) {
     return new Promise((resolve, reject) => {
       // wrap in timeout to simulate server api call
       setTimeout(() => {
-
         // authenticate
         if (url.endsWith('/users/authenticate') && opts.method === 'POST') {
           // get parameters from post request
-          let params = JSON.parse(opts.body);
+          const params = JSON.parse(opts.body);
 
           // find if any user matches login credentials
-          let filteredUsers = users.filter(user => {
-            return user.username === params.username && user.password === params.password;
-          });
+          const filteredUsers = users.filter(user => user.username === params.username && user.password === params.password);
 
           if (filteredUsers.length) {
             // if login details are valid return user details and fake jwt token
-            let user = filteredUsers[0];
-            let responseJson = {
+            const user = filteredUsers[0];
+            const responseJson = {
               id: user.id,
               username: user.username,
               firstName: user.firstName,
@@ -29,7 +26,7 @@ export function configureFakeBackend() {
               cfiRequired: user.cfiRequired,
               token: 'fake-jwt-token',
             };
-            resolve({ok: true, json: () => responseJson});
+            resolve({ ok: true, json: () => responseJson });
           } else {
             // else return error
             reject('Username or password is incorrect');
@@ -42,7 +39,7 @@ export function configureFakeBackend() {
         if (url.endsWith('/users') && opts.method === 'GET') {
           // check for fake auth token in header and return users if valid, this security is implemented server side in a real application
           if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
-            resolve({ok: true, json: () => users});
+            resolve({ ok: true, json: () => users });
           } else {
             // return 401 not authorised if token is null or invalid
             reject('Unauthorised');
@@ -56,15 +53,13 @@ export function configureFakeBackend() {
           // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
           if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
             // find user by id in users array
-            let urlParts = url.split('/');
-            let id = parseInt(urlParts[urlParts.length - 1]);
-            let matchedUsers = users.filter(user => {
-              return user.id === id;
-            });
-            let user = matchedUsers.length ? matchedUsers[0] : null;
+            const urlParts = url.split('/');
+            const id = parseInt(urlParts[urlParts.length - 1]);
+            const matchedUsers = users.filter(user => user.id === id);
+            const user = matchedUsers.length ? matchedUsers[0] : null;
 
             // respond 200 OK with user
-            resolve({ok: true, json: () => user});
+            resolve({ ok: true, json: () => user });
           } else {
             // return 401 not authorised if token is null or invalid
             reject('Unauthorised');
@@ -76,14 +71,12 @@ export function configureFakeBackend() {
         // register user
         if (url.endsWith('/users/register') && opts.method === 'POST') {
           // get new user object from post body
-          let newUser = JSON.parse(opts.body);
+          const newUser = JSON.parse(opts.body);
 
           // validation
-          let duplicateUser = users.filter(user => {
-            return user.username === newUser.username;
-          }).length;
+          const duplicateUser = users.filter(user => user.username === newUser.username).length;
           if (duplicateUser) {
-            reject('Username "' + newUser.username + '" is already taken');
+            reject(`Username "${newUser.username}" is already taken`);
             return;
           }
 
@@ -93,7 +86,7 @@ export function configureFakeBackend() {
           localStorage.setItem('users', JSON.stringify(users));
 
           // respond 200 OK
-          resolve({ok: true, json: () => ({})});
+          resolve({ ok: true, json: () => ({}) });
 
           return;
         }
@@ -103,10 +96,10 @@ export function configureFakeBackend() {
           // check for fake auth token in header and return user if valid, this security is implemented server side in a real application
           if (opts.headers && opts.headers.Authorization === 'Bearer fake-jwt-token') {
             // find user by id in users array
-            let urlParts = url.split('/');
-            let id = parseInt(urlParts[urlParts.length - 1]);
+            const urlParts = url.split('/');
+            const id = parseInt(urlParts[urlParts.length - 1]);
             for (let i = 0; i < users.length; i++) {
-              let user = users[i];
+              const user = users[i];
               if (user.id === id) {
                 // delete user
                 users.splice(i, 1);
@@ -116,7 +109,7 @@ export function configureFakeBackend() {
             }
 
             // respond 200 OK
-            resolve({ok: true, json: () => ({})});
+            resolve({ ok: true, json: () => ({}) });
           } else {
             // return 401 not authorised if token is null or invalid
             reject('Unauthorised');
@@ -127,8 +120,7 @@ export function configureFakeBackend() {
 
         // pass through any requests not handled above
         realFetch(url, opts).then(response => resolve(response));
-
       }, 500);
     });
-  }
+  };
 }

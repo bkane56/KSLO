@@ -4,7 +4,7 @@ const initialState = {
   isPending: false,
   isFulfilled: false,
   isError: false,
-  events: {},
+  events: [],
 };
 
 export default function events(state = initialState, action) {
@@ -17,7 +17,6 @@ export default function events(state = initialState, action) {
       };
 
     case eventsConstants.FETCH_EVENTS_FULFILLED:
-
       return {
         ...state,
         isFulfilled: true,

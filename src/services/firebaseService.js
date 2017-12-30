@@ -6,22 +6,18 @@ function getEvents(nNumber) {
   // get a list of events from Firebase
   // return fire.database().ref(`/events/${nNumber}`).once('value');
   const ref = fire.database().ref(`/events/${nNumber}`);
-  return ref.once('value').then(function(snapshot){
-    return snapshot.val();
-  });
+  return ref.once('value').then(snapshot => Object.values(snapshot.val()));
 }
 
-function saveEvent(slot, title, nNumber) {
-  // const startTime = Moment(slot.start)
-  // startTime.subtract(1, 'months');
-  // console.log('dec should = 11 ', startTime.get('month'));
+function saveEvent(slot, title, desc, nNumber) {
   // save an event to firebase
+
   fire.database().ref(`/events/${nNumber}`).push({
-    start: Moment(slot.start).format(eventsConstants.DATE_FORMAT),
-    end: Moment(slot.end).format(eventsConstants.DATE_FORMAT),
+    start: Moment(slot.start).format(),
+    end: Moment(slot.end).format(),
     allDay: false,
     title,
-    desc: 'solo',
+    desc,
   });
 }
 

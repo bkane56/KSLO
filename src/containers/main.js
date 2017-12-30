@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import { firebaseConstants } from '../consatants';
+import PropTypes from 'prop-types';
 import { metarActions } from '../actions';
 import NavBar from '../components/navBar';
 import Header from '../components/header';
@@ -30,6 +29,16 @@ class Main extends Component {
     );
   }
 }
+
+Main.defaultProps = {
+  getMetarData() {},
+  flightCategory: '',
+};
+
+Main.propTypes = {
+  getMetarData: PropTypes.func,
+  flightCategory: PropTypes.string,
+};
 
 function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;

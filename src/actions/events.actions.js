@@ -8,11 +8,10 @@ function getEvents(nNumber) {
   };
 }
 
-function addEvents(slot, title, nNumber) {
-  console.log('event_action_add',slot, title, nNumber);
+function addEvents(slot, title, desc, nNumber) {
   return {
     type: eventsConstants.ADD_EVENTS,
-    payload: firebaseService.saveEvent(slot, title, nNumber),
+    payload: firebaseService.saveEvent(slot, title, desc, nNumber),
   };
 }
 

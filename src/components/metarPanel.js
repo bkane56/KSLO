@@ -50,7 +50,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  const { getMetarData } = metarActions.getMetarData
+  const { getMetarData } = metarActions.getMetarData;
   return bindActionCreators({ getMetarData }, dispatch);
 }
 

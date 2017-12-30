@@ -2,7 +2,7 @@ import axios from 'axios';
 import { metarConstants } from '../consatants';
 
 export const metarServices = {
-  getMetarInfo
+  getMetarInfo,
 };
 
 function getMetarInfo(station, dataType) {

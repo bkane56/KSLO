@@ -9,13 +9,11 @@ import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import HeaderMetar from '../components/headerMetar';
 import '../style/App.css';
 import '../style/calendar.css';
+import { compileEventList } from '../utils/eventUtils';
 import { Events } from '../resources/events';
 import { eventActions } from '../actions';
 
-
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
-
-
 
 class Planner extends Component {
   static getCurrentDate() {
@@ -36,7 +34,7 @@ class Planner extends Component {
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
     this.handleSetEventColor = this.handleSetEventColor.bind(this);
-    Planner.getCurrentDate = Planner.getCurrentDate.bind(this);
+    this.addLocalSlot = this.addLocalSlot.bind(this);
     // this.state = {
     //   events: Events,
     // };
@@ -46,6 +44,7 @@ class Planner extends Component {
     this.props.getEvents('N4SW');
   }
 
+
   handleSetEventColor() {
     if (this.props.cfiRequired) {
       return 'cfiRequired';
@@ -53,9 +52,17 @@ class Planner extends Component {
     return 'test-class';
   }
 
+  addLocalSlot({ start, end }) {
+    this.state.events.push({
+      start,
+      end,
+      title: this.props.name,
+      desc: 'quick trip around',
+    });
+    this.setState({});
+  }
+
   handleSelectEvent() {
-    // just for example
-    // console.log(`handleSelectEvent: ${JSON.stringify(arguments)}`);
     const myColor = { background: '#252885', text: '#2678FF' };
     notify.show(this.props.name, 'custom', 5000, myColor);
   }
@@ -66,19 +73,14 @@ class Planner extends Component {
     if (Moment(eventStart).isAfter(Moment())) {
       const title = this.props.name;
       const desc = 'solo';
-      this.props.addEvents(slot, title, nNumber);
-      this.state.events.push({
-        start,
-        end,
-        title: this.props.name,
-      });
-      this.setState({});
+      this.props.addEvents(slot, title, desc, nNumber);
+      // this.addLocalSlot(start, end);
     }
   }
 
   render() {
-    const { metar, flightCategory, events} = this.props;
-    console.log('events into calendar', events)
+    const { metar, flightCategory, eventList } = this.props;
+    const events = compileEventList(eventList);
     return (
       <div>
         <HeaderMetar
@@ -91,7 +93,7 @@ class Planner extends Component {
             selectable
             popup
             events={events}
-            onSelectSlot={(slot) => this.handleSelectSlot(slot)}
+            onSelectSlot={slot => this.handleSelectSlot(slot)}
             onSelectEvent={this.handleSelectEvent}
             min={new Date('2017, 1, 7, 06:00')}
             max={new Date('2017, 1, 7, 23:59')}
@@ -118,6 +120,7 @@ Planner.defaultProps = {
   name: '',
   cfiRequired: true,
   addEvents() {},
+  getEvents() {},
 };
 
 Planner.propTypes = {
@@ -126,6 +129,7 @@ Planner.propTypes = {
   name: PropTypes.string,
   cfiRequired: PropTypes.bool,
   addEvents: PropTypes.func,
+  getEvents: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -137,11 +141,10 @@ function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;
   const metar = state.metar.data[0].raw_text;
   const { lastName, firstName, cfiRequired } = state.authentication.user;
-  const eventObject = state.events.events;
-  const events = Object.values(eventObject)
+  const eventList = state.events.events;
   const name = `${lastName}, ${firstName}`;
   return {
-    lastName, firstName, cfiRequired, name, flightCategory, metar, events,
+    lastName, firstName, cfiRequired, name, flightCategory, metar, eventList,
   };
 }
 
