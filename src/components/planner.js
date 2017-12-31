@@ -41,7 +41,7 @@ class Planner extends Component {
   }
 
   componentWillMount() {
-    this.props.getEvents('N4SW');
+    // this.props.getEvents('N4SW');
   }
 
 
@@ -81,6 +81,8 @@ class Planner extends Component {
   render() {
     const { metar, flightCategory, eventList } = this.props;
     const events = compileEventList(eventList);
+    const minDate = new Date('2017, 1, 7, 06:00');
+    const maxDate = new Date('2017, 1, 7, 23:59');
     return (
       <div>
         <HeaderMetar
@@ -95,8 +97,8 @@ class Planner extends Component {
             events={events}
             onSelectSlot={slot => this.handleSelectSlot(slot)}
             onSelectEvent={this.handleSelectEvent}
-            min={new Date('2017, 1, 7, 06:00')}
-            max={new Date('2017, 1, 7, 23:59')}
+            min={minDate}
+            max={maxDate}
             views={['month', 'week', 'day']}
             defaultView="week"
             defaultDate={new Date(Planner.getCurrentDate())}
@@ -140,11 +142,9 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;
   const metar = state.metar.data[0].raw_text;
-  const { lastName, firstName, cfiRequired } = state.authentication.user;
   const eventList = state.events.events;
-  const name = `${lastName}, ${firstName}`;
   return {
-    lastName, firstName, cfiRequired, name, flightCategory, metar, eventList,
+    flightCategory, metar, eventList,
   };
 }
 

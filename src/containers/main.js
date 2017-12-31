@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import { metarActions } from '../actions';
-import NavBar from '../components/navBar';
 import Header from '../components/header';
 import Planner from '../components/planner';
 import '../style/App.css';
+import {firebaseService} from "../services";
 
 class Main extends Component {
   componentDidMount() {
@@ -19,7 +19,6 @@ class Main extends Component {
     const { flightCategory } = this.props;
     return (
       <div className="App">
-        <NavBar />
         <Header
           flightCategory={flightCategory}
         />
@@ -51,3 +50,20 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
+// onSubmit(event) {
+//   const {
+//     username,
+//     email,
+//     passwordOne,
+//   } = this.state;
+//
+//   firebaseService.createUserWithEmailAndPassword(email, passwordOne)
+//     .then((authUser) => {
+//       this.setState(() => ({ ...INITIAL_STATE }));
+//     })
+//     .catch((error) => {
+//       this.setState(byPropKey('error', error));
+//     });
+//
+//   event.preventDefault();
+// }

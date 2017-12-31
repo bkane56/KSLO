@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import * as firebase from 'firebase';
 import { firebaseConstants } from '../consatants';
 
 const config = {
@@ -9,5 +9,9 @@ const config = {
   storageBucket: firebaseConstants.STORAGE_BUCKET,
   messagingSenderId: firebaseConstants.MESSAGE_SENDER_ID,
 };
-const fire = firebase.initializeApp(config);
-export default fire;
+if (!firebase.apps.length) {
+  firebase.initializeApp(config);
+}
+const fireDB = firebase.database();
+const auth = firebase.auth();
+export { auth, fireDB };

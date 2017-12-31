@@ -2,3 +2,12 @@
     background-color: rgba(047, 164, 231, 0.2);
     text-align: center;
 }
+
+.firebaseError {
+    font-size: medium;
+    color: #D8000C;
+    background-color: #FFD2D2;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 3px;
+}
