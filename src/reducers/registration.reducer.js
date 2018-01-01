@@ -1,5 +1,6 @@
 import { userConstants } from '../consatants';
 
+const { REGISTER_USER } = userConstants.REGISTER_USER;
 const initialState = {
   isPending: false,
   isFulfilled: false,
@@ -8,16 +9,15 @@ const initialState = {
 };
 
 export default function registration(state = initialState, action) {
-  console.log('registration reducer', action.payload);
   switch (action.type) {
-    case userConstants.REGISTER_USER_PENDING:
+    case `${REGISTER_USER}_PENDING`:
       return {
         ...state,
         isFulfilled: false,
         isPending: true,
       };
 
-    case userConstants.REGISTER_USER_FULFILLED:
+    case `${REGISTER_USER}_FULFILLED`:
       return {
         ...state,
         isFulfilled: true,
@@ -25,7 +25,7 @@ export default function registration(state = initialState, action) {
         registeredUser: action.payload,
       };
 
-    case userConstants.REGISTER_USER_REJECTED:
+    case `${REGISTER_USER}_REJECTED`:
       return {
         ...state,
         isFulfilled: false,

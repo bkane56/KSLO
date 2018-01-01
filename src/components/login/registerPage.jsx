@@ -6,26 +6,27 @@ import { bindActionCreators } from 'redux';
 import { userActions } from '../../actions';
 import { auth } from '../../utils/fire';
 import '../../style/style.css';
+import { firebaseService } from '../../services';
 
 const INITIAL_STATE = {
-  user: {
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
-    passwordOne: '',
-    passwordTwo: '',
-    error: null,
-    cfiRequired: true,
-  },
+  firstName: '',
+  lastName: '',
+  username: '',
+  email: '',
+  userType: '',
+  passwordOne: '',
+  passwordTwo: '',
+  isAllowedToSchedule: true,
+  cfiRequired: true,
   submitted: false,
+  error: null,
 };
+
 class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = INITIAL_STATE;
-
     this.displayErrorMessage = this.displayErrorMessage.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -51,17 +52,27 @@ class RegisterPage extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     this.setState({ submitted: true });
+    const savedUser = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+      username: this.state.username,
+      cfiRequired: this.state.cfiRequired,
+      isAllowedToSchedule: this.state.isAllowedToSchedule,
+      email: this.state.email,
+      userType: 'admin',
+    };
+
     const {
-      firstName,
-      lastName,
-      username,
       email,
       passwordOne,
-      cfiRequired,
-    } = this.state.user;
+    } = this.state;
+
     auth.createUserAndRetrieveDataWithEmailAndPassword(email, passwordOne)
       .then(() => {
         this.setState(() => ({ ...INITIAL_STATE }));
+        const userID = auth.currentUser.uid;
+        console.log('userId: ', userID);
+        this.props.saveUser(savedUser, userID);
       }).catch((error) => {
         this.setState(this.handleChange('error', error));
       });
@@ -69,107 +80,109 @@ class RegisterPage extends React.Component {
 
   render() {
     const { registering } = this.props;
-    const { user, submitted } = this.state;
-    const isInvalid = user.passwordOne !== user.passwordTwo || user.passwordOne === '' || user.passwordTwo === ''
-      || user.email === '' || user.username === '' || user.firstName === '' || user.lastName === '';
+    const {
+      firstName, lastName, username, email, passwordOne, passwordTwo, submitted,
+    } = this.state;
+    const isInvalid = passwordOne !== passwordTwo || passwordOne === '' || passwordTwo === ''
+      || email === '' || username === '' || firstName === '' || lastName === '' || email === '';
 
     return (
       <div className="col-md-6 col-md-offset-3">
         <h2>Register</h2>
         <form name="form" onSubmit={this.handleSubmit}>
-          <div className={`form-group${submitted && !user.firstName ? ' has-error' : ''}`}>
+          <div className={`form-group${submitted && !firstName ? ' has-error' : ''}`}>
             <label htmlFor="firstName">First Name</label>
             <input
               type="text"
               placeholder="First Name"
               className="form-control"
               name="firstName"
-              value={user.firstName}
+              value={firstName}
               onChange={
                 event => this.setState(this.handleChange(event.target.name, event.target.value))
               }
             />
-            {submitted && !user.firstName &&
+            {submitted && !firstName &&
               <div className="help-block">First Name is required</div>
             }
           </div>
-          <div className={`form-group${submitted && !user.lastName ? ' has-error' : ''}`}>
+          <div className={`form-group${submitted && !lastName ? ' has-error' : ''}`}>
             <label htmlFor="lastName">Last Name</label>
             <input
               type="text"
               placeholder="Last Name"
               className="form-control"
               name="lastName"
-              value={user.lastName}
+              value={lastName}
               onChange={
                 event => this.setState(this.handleChange(event.target.name, event.target.value))
               }
             />
-            {submitted && !user.lastName &&
+            {submitted && !lastName &&
             <div className="help-block">Last Name is required</div>
                         }
           </div>
-          <div className={`form-group${submitted && !user.username ? ' has-error' : ''}`}>
+          <div className={`form-group${submitted && !username ? ' has-error' : ''}`}>
             <label htmlFor="username">Username</label>
             <input
               type="text"
               placeholder="User Name"
               className="form-control"
               name="username"
-              value={user.username}
+              value={username}
               onChange={
                 event => this.setState(this.handleChange(event.target.name, event.target.value))
               }
             />
-            {submitted && !user.username &&
+            {submitted && !username &&
             <div className="help-block">Username is required</div>
                         }
           </div>
-          <div className={`form-group${submitted && !user.email ? ' has-error' : ''}`}>
+          <div className={`form-group${submitted && !email ? ' has-error' : ''}`}>
             <label htmlFor="email">Email</label>
             <input
               type="email"
               placeholder="Email"
               className="form-control"
               name="email"
-              value={user.email}
+              value={email}
               onChange={
                 event => this.setState(this.handleChange(event.target.name, event.target.value))
               }
             />
-            {submitted && !user.username &&
+            {submitted && !username &&
             <div className="help-block">Username is required</div>
             }
           </div>
-          <div className={`form-group${submitted && !user.passwordOne ? ' has-error' : ''}`}>
+          <div className={`form-group${submitted && !passwordOne ? ' has-error' : ''}`}>
             <label htmlFor="password">Password</label>
             <input
               type="password"
               placeholder="Password"
               className="form-control"
               name="passwordOne"
-              value={user.passwordOne}
+              value={passwordOne}
               onChange={
                 event => this.setState(this.handleChange(event.target.name, event.target.value))
               }
             />
-            {submitted && !user.passwordOne &&
+            {submitted && !passwordOne &&
             <div className="help-block">Password is required</div>
             }
           </div>
-          <div className={`form-group${submitted && !user.passwordTwo ? ' has-error' : ''}`}>
+          <div className={`form-group${submitted && !passwordTwo ? ' has-error' : ''}`}>
             <label htmlFor="passwordTwo">Re-Enter Password</label>
             <input
               type="password"
               placeholder="Re-Enter Your Password"
               className="form-control"
               name="passwordTwo"
-              value={user.passwordTwo}
+              value={passwordTwo}
               onChange={
                 event => this.setState(this.handleChange(event.target.name, event.target.value))
               }
             />
-            {submitted && !user.passwordTwo && (user.passwordOne !== user.passwordTwo) &&
+            {submitted && !passwordTwo && (passwordOne !== passwordTwo) &&
             <div className="help-block">Password is required</div>
             }
           </div>
@@ -187,8 +200,8 @@ class RegisterPage extends React.Component {
   }
 }
 function mapDispatchToProps(dispatch) {
-  const { registerUser } = userActions;
-  return bindActionCreators({ registerUser }, dispatch);
+  const { registerUser, saveUser } = userActions;
+  return bindActionCreators({ registerUser, saveUser }, dispatch);
 }
 function mapStateToProps(state) {
   const { registering } = state.registration;

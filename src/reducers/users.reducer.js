@@ -1,52 +1,37 @@
 import { userConstants } from '../consatants';
 
+const {
+  GET_ALL_USERS, DELETE_USER, SAVE_USER, LOGIN_USER,
+} = userConstants;
+const initialState = {
+  isPending: false,
+  isFulfilled: false,
+  isError: false,
+};
 export default function users(state = {}, action) {
+  console.log('reducer payload ', action.payload);
   switch (action.type) {
-    case userConstants.GETALL_REQUEST:
-      return {
-        loading: true,
-      };
-
-    case userConstants.GETALL_SUCCESS:
-      return {
-        items: action.users,
-      };
-
-    case userConstants.GETALL_FAILURE:
-      return {
-        error: action.error,
-      };
-
-    case userConstants.DELETE_REQUEST:
-      // add 'deleting:true' property to user being deleted
+    case `${SAVE_USER}_PENDING`:
       return {
         ...state,
-        items: state.items.map(user =>
-          (user.id === action.id
-            ? { ...user, deleting: true }
-            : user)),
+        isFulfilled: false,
+        isPending: true,
       };
-
-    case userConstants.DELETE_SUCCESS:
-      // remove deleted user from state
-      return {
-        items: state.items.filter(user => user.id !== action.id),
-      };
-
-    case userConstants.DELETE_FAILURE:
-      // remove 'deleting:true' property and add 'deleteError:[error]' property to user
+    case `${SAVE_USER}_FULFILLED`:
+      console.log('reducer fulfilled payload ', action.payload);
       return {
         ...state,
-        items: state.items.map((user) => {
-          if (user.id === action.id) {
-            // make copy of user without 'deleting:true' property
-            const { deleting, ...userCopy } = user;
-            // return copy of user with 'deleteError:[error]' property
-            return { ...userCopy, deleteError: action.error };
-          }
+        isFulfilled: true,
+        isPending: false,
+        user: action.payload,
+      };
 
-          return user;
-        }),
+    case `${SAVE_USER}_REJECTED`:
+      return {
+        ...state,
+        isFulfilled: false,
+        isPending: false,
+        isError: true,
       };
 
     default:

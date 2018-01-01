@@ -5,9 +5,7 @@ import { auth, fireDB } from '../utils/fire';
 // Sign Up
 function createUserWithEmailAndPassword(email, password) {
   auth.createUserAndRetrieveDataWithEmailAndPassword(email, password)
-    .then((authUser) => {
-      return authUser;
-    });
+    .then(authUser => authUser);
 }
 // Sign In
 function signInWithEmailAndPassword(email, password) {
@@ -27,14 +25,11 @@ function updatePassword(password) {
 }
 // getEvents data from firebase database
 function getEvents(nNumber) {
-  // get a list of events from Firebase
   const ref = fireDB.database().ref(`/events/${nNumber}`);
   return ref.once('value').then(snapshot => Object.values(snapshot.val()));
 }
 // save an event to firebase datatbase
 function saveEvent(slot, title, desc, nNumber) {
-  // save an event to firebase
-
   fireDB.database().ref(`/events/${nNumber}`).push({
     start: Moment(slot.start).format(),
     end: Moment(slot.end).format(),
@@ -42,6 +37,13 @@ function saveEvent(slot, title, desc, nNumber) {
     title,
     desc,
   });
+}
+// save user data to firebase
+function saveUser(user, userId) {
+  console.log('saved user in fireservice ', user);
+  return fireDB.database().ref(`/users/${userId}`).push({
+    user,
+  }).then(() => user);
 }
 
 export const firebaseService = {
@@ -52,4 +54,5 @@ export const firebaseService = {
   updatePassword,
   saveEvent,
   getEvents,
+  saveUser,
 };

@@ -9,6 +9,7 @@ export const userActions = {
   registerUser,
   getAllUsers,
   deleteUser: _deleteUser,
+  saveUser,
 };
 
 function loginUser(email, password) {
@@ -29,13 +30,18 @@ function registerUser(email, password) {
   };
 }
 
-function getAllUsers() {
+function saveUser(user, userId) {
+  console.log('saved user at user.actions ', user);
+  return {
+    type: userConstants.SAVE_USER,
+    payload: firebaseService.saveUser(user, userId),
+  };
+}
 
+function getAllUsers() {
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _deleteUser(id) {
 
 }
-
-

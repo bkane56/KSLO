@@ -41,7 +41,7 @@ class Planner extends Component {
   }
 
   componentWillMount() {
-    // this.props.getEvents('N4SW');
+    this.props.getEvents('N4SW');
   }
 
 

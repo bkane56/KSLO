@@ -9,9 +9,11 @@ const config = {
   storageBucket: firebaseConstants.STORAGE_BUCKET,
   messagingSenderId: firebaseConstants.MESSAGE_SENDER_ID,
 };
+
+let fire = null;
 if (!firebase.apps.length) {
-  firebase.initializeApp(config);
+  fire = firebase.initializeApp(config);
 }
-const fireDB = firebase.database();
+const fireDB = fire;
 const auth = firebase.auth();
 export { auth, fireDB };
