@@ -16,4 +16,4 @@ if (!firebase.apps.length) {
 }
 const fireDB = fire;
 const auth = firebase.auth();
-export { auth, fireDB };
+export { auth, fireDB, firebase };

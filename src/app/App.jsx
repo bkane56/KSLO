@@ -1,8 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { history } from '../helpers';
-import { alertActions } from '../actions';
+
 import Main from '../containers/main';
 import NavBar from '../components/navBar';
 import { LoginPage } from '../components/login/loginPage';
@@ -11,21 +11,30 @@ import LandingPage from '../components/landingPage';
 import ForgotPassword from '../components/forgotPassword';
 import Account from '../components/account';
 import { routesConstants } from '../consatants';
+import { firebase, auth } from '../utils/fire';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      authUser: false,
+      count: 1,
+    };
+  }
+  componentDidMount() {
+    let { aUser } = this.props;
+    auth.onAuthStateChanged((authUser) => {
+      aUser = !!authUser;
 
-    const { dispatch } = this.props;
-    history.listen((location, action) => {
-      // clear alert on location change
-      dispatch(alertActions.clear());
+      this.setState(() => ({ authUser }));
+      console.log('logged in CDM? ', aUser);
+      // console.log('count in CDM? ', this.state.count);
     });
   }
-
   render() {
-    const { alert } = this.props;
+    const { alert, aUser } = this.props;
     const appClass = `App ${this.props.flightCategory}`;
+    console.log('logged in render? ', aUser);
     return (
       <div className={appClass}>
         <div className="container">
@@ -33,9 +42,9 @@ class App extends React.Component {
             {alert.message &&
             <div className={`alert ${alert.type}`}>{alert.message}</div>
             }
-            <Router >
+            <Router history={history} >
               <div>
-                <NavBar />
+                <NavBar authUser={this.state.authUser} />
                 <hr />
                 <Route
                   exact
@@ -79,8 +88,8 @@ class App extends React.Component {
 function mapStateToProps(state) {
   const { alert } = state;
   const flightCategory = state.metar.data[0].flight_category;
-  return { alert, flightCategory };
+  const aUser = null;
+  return { alert, flightCategory, aUser };
 }
-
 const connectedApp = connect(mapStateToProps)(App);
 export { connectedApp as App };

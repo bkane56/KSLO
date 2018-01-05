@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { auth } from '../../utils/fire';
 import '../../style/style.css';
+import { history } from '../../helpers';
+import {routesConstants} from "../../consatants";
 
 const INITIAL_STATE = {
   email: '',
@@ -47,8 +49,8 @@ export class LoginPage extends React.Component {
     auth.signInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState(() => ({ ...INITIAL_STATE }));
+        history.push(routesConstants.MAIN);
       }).catch((error) => {
-        console.log('error ', error.message);
         this.setState(this.handleChange('error', error));
       });
   }
