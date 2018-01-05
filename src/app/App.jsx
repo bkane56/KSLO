@@ -11,37 +11,27 @@ import LandingPage from '../components/landingPage';
 import ForgotPassword from '../components/forgotPassword';
 import Account from '../components/account';
 import { routesConstants } from '../consatants';
-import { firebase, auth } from '../utils/fire';
+import { auth } from '../utils/fire';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       authUser: false,
-      count: 1,
     };
   }
   componentDidMount() {
-    let { aUser } = this.props;
     auth.onAuthStateChanged((authUser) => {
-      aUser = !!authUser;
-
       this.setState(() => ({ authUser }));
-      console.log('logged in CDM? ', aUser);
-      // console.log('count in CDM? ', this.state.count);
     });
   }
   render() {
-    const { alert, aUser } = this.props;
-    const appClass = `App ${this.props.flightCategory}`;
-    console.log('logged in render? ', aUser);
+    const { flightCategory } = this.props;
+    const appClass = `App ${flightCategory}`;
     return (
       <div className={appClass}>
         <div className="container">
           <div className="col-sm-10 col-sm-offset-1">
-            {alert.message &&
-            <div className={`alert ${alert.type}`}>{alert.message}</div>
-            }
             <Router history={history} >
               <div>
                 <NavBar authUser={this.state.authUser} />

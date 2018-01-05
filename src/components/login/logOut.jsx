@@ -6,7 +6,7 @@ import { routesConstants } from '../../consatants';
 
 function handleSignOut() {
   firebaseService.signOut();
-  history.push(routesConstants.LOGIN_PAGE);
+  history.push(routesConstants.LANDING);
 }
 
 export default function SignOutButton() {
