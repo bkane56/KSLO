@@ -9,7 +9,6 @@ const initialState = {
   isError: false,
 };
 export default function users(state = {}, action) {
-  console.log('reducer payload ', action.payload);
   switch (action.type) {
     case `${SAVE_USER}_PENDING`:
       return {
