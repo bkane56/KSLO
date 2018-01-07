@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
 import { auth } from '../../utils/fire';
 import '../../style/style.css';
 import { history } from '../../helpers';
-import {routesConstants} from "../../consatants";
+import { routesConstants } from '../../consatants';
+import { userActions } from '../../actions';
 
 const INITIAL_STATE = {
   email: '',
@@ -11,7 +15,7 @@ const INITIAL_STATE = {
   error: null,
   submitted: false,
 };
-export class LoginPage extends React.Component {
+class LoginPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -90,7 +94,7 @@ export class LoginPage extends React.Component {
           </div>
           <div className="form-group">
             <button className="btn btn-primary">Login</button>
-            <Link to="/register" className="btn btn-link">Register</Link>
+            <Link to={routesConstants.REGISTER_PAGE} className="btn btn-link">Register</Link>
           </div>
           {this.displayErrorMessage()}
         </form>
@@ -98,3 +102,10 @@ export class LoginPage extends React.Component {
     );
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  const { getUser } = userActions;
+  return bindActionCreators({ getUser }, dispatch);
+}
+const connectedLoginPage = connect(null, mapDispatchToProps)(LoginPage);
+export { connectedLoginPage as LoginPage };

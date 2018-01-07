@@ -10,6 +10,7 @@ export const userActions = {
   getAllUsers,
   deleteUser: _deleteUser,
   saveUser,
+  getUser,
 };
 
 function loginUser(email, password) {
@@ -26,10 +27,16 @@ function logoutUser() {
 function registerUser(email, password) {
   return {
     type: userConstants.REGISTER_USER,
-    payload: firebaseService.createUserWithEmailAndPassword(email, password)
+    payload: firebaseService.createUserWithEmailAndPassword(email, password),
   };
 }
 
+function getUser(userId) {
+  return {
+    type: userConstants.FETCH_USER,
+    payload: firebaseService.getUser(userId),
+  }
+}
 function saveUser(user, userId) {
   console.log('saved user at user.actions ', user);
   return {

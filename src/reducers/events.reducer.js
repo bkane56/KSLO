@@ -25,6 +25,7 @@ export default function events(state = initialState, action) {
       };
 
     case eventsConstants.FETCH_EVENTS_REJECTED:
+      console.log('reducer', action.payload);
       return {
         ...state,
         isFulfilled: false,

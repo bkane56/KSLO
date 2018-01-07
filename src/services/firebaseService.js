@@ -45,6 +45,11 @@ function saveUser(user, userId) {
     user,
   }).then(() => user);
 }
+// get current user from database
+function getUser(userId) {
+  const ref = fireDB.database().ref(`/users/${userId}`);
+  return ref.once('value').then(snapshot => Object.values(snapshot.val())[0]);
+}
 
 export const firebaseService = {
   createUserWithEmailAndPassword,
@@ -55,4 +60,5 @@ export const firebaseService = {
   saveEvent,
   getEvents,
   saveUser,
+  getUser,
 };

@@ -1,9 +1,13 @@
 import React from 'react';
+import Header from './header';
 
 export default function LandingPage() {
   return (
     <div>
-      <h1>Landing Page</h1>
+      <Header />
+      <div>
+        <h1>Landing Page</h1>
+      </div>
     </div>
   );
 }

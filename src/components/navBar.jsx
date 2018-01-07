@@ -5,19 +5,19 @@ import '../style/navBar.css';
 import { routesConstants } from '../consatants';
 
 
-const NavBar = ({ authUser}) =>
-  (<nav className="navbar navbar-default">
-    <div className="continer-fluid">
-      <div className="navbar-header">
-        { authUser
+const NavBar = ({ authUser }) =>
+  (
+    <nav className="navbar navbar-default">
+      <div className="continer-fluid">
+        <div className="navbar-header">
+          { authUser
           ? <NavigationAuth />
           : <NavigationNonAuth />
         }
-        {console.log('authUser in navbar ', authUser)}
-
+        </div>
       </div>
-    </div>
-  </nav>);
+    </nav>
+  );
 
 const NavigationAuth = () =>
 

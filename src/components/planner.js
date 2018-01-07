@@ -11,7 +11,8 @@ import '../style/App.css';
 import '../style/calendar.css';
 import { compileEventList } from '../utils/eventUtils';
 import { Events } from '../resources/events';
-import { eventActions } from '../actions';
+import { eventActions, userActions } from '../actions';
+import { auth } from '../utils/fire';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
 
@@ -44,6 +45,13 @@ class Planner extends Component {
     this.props.getEvents('N4SW');
   }
 
+  componentDidMount() {
+
+    if (auth.currentUser) {
+      const userID = auth.currentUser.uid;
+      this.props.getUser(userID);
+    }
+  }
 
   handleSetEventColor() {
     if (this.props.cfiRequired) {
@@ -70,8 +78,8 @@ class Planner extends Component {
   handleSelectSlot(slot) {
     const eventStart = Moment(slot.start).format();
     const nNumber = 'N4SW';
-    if (Moment(eventStart).isAfter(Moment())) {
-      const title = this.props.name;
+    if (Moment(eventStart).isAfter(Moment() && this.props.isAllowedToSchedule)) {
+      const title = this.props.username;
       const desc = 'solo';
       this.props.addEvents(slot, title, desc, nNumber);
       // this.addLocalSlot(start, end);
@@ -83,6 +91,7 @@ class Planner extends Component {
     const events = compileEventList(eventList);
     const minDate = new Date('2017, 1, 7, 06:00');
     const maxDate = new Date('2017, 1, 7, 23:59');
+    const appClass = `App ${flightCategory}`;
     return (
       <div>
         <HeaderMetar
@@ -136,15 +145,18 @@ Planner.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   const { getEvents, addEvents } = eventActions;
-  return bindActionCreators({ getEvents, addEvents }, dispatch);
+  const { getUser } = userActions;
+  return bindActionCreators({ getEvents, addEvents, getUser }, dispatch);
 }
 
 function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;
   const metar = state.metar.data[0].raw_text;
   const eventList = state.events.events;
+  const { cfiRequired, isAllowedToSchedule, username } = state.users.data;
+
   return {
-    flightCategory, metar, eventList,
+    flightCategory, metar, eventList, cfiRequired, isAllowedToSchedule, username,
   };
 }
 

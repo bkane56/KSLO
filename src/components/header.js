@@ -3,8 +3,8 @@ import '../style/App.css';
 import '../style/calendar.css';
 
 export default function Header(props) {
-  const { flightCategory } = props;
-  const headerClass = `App-header ${flightCategory}`;
+  // const { flightCategory } = props;
+  // const headerClass = `App-header ${flightCategory}`;
 
   return (
     <div>

@@ -2,9 +2,12 @@ import { eventsConstants } from '../consatants';
 import { eventsServices, firebaseService } from '../services';
 
 function getEvents(nNumber) {
+  console.log('hit action')
   return {
     type: eventsConstants.FETCH_EVENTS,
-    payload: firebaseService.getEvents(nNumber),
+    payload: {
+      promise: firebaseService.getEvents(nNumber),
+    },
   };
 }
 
