@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { userActions } from '../../actions';
+import { authActions, userActions } from '../../actions';
 import { auth } from '../../utils/fire';
 import '../../style/style.css';
-import { firebaseService } from '../../services';
 
 const INITIAL_STATE = {
   firstName: '',
@@ -68,17 +67,17 @@ class RegisterPage extends React.Component {
     } = this.state;
 
     auth.createUserAndRetrieveDataWithEmailAndPassword(email, passwordOne)
-      .then(() => {
+      .then((authUser) => {
         this.setState(() => ({ ...INITIAL_STATE }));
         const userID = auth.currentUser.uid;
         this.props.saveUser(savedUser, userID);
+        this.props.addAuth(auth.currentUser);
       }).catch((error) => {
         this.setState(this.handleChange('error', error));
       });
   }
 
   render() {
-    const { registering } = this.props;
     const {
       firstName, lastName, username, email, passwordOne, passwordTwo, submitted,
     } = this.state;
@@ -198,15 +197,11 @@ class RegisterPage extends React.Component {
   }
 }
 function mapDispatchToProps(dispatch) {
-  const { registerUser, saveUser } = userActions;
-  return bindActionCreators({ registerUser, saveUser }, dispatch);
-}
-function mapStateToProps(state) {
-  const { registering } = state.registration;
-  return {
-    registering,
-  };
+  const { saveUser } = userActions;
+  const { addAuth } = authActions;
+  return bindActionCreators({ saveUser, addAuth }, dispatch);
 }
 
-const connectedRegisterPage = connect(mapStateToProps, mapDispatchToProps)(RegisterPage);
+
+const connectedRegisterPage = connect(null, mapDispatchToProps)(RegisterPage);
 export { connectedRegisterPage as RegisterPage };

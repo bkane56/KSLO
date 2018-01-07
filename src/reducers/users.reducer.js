@@ -1,8 +1,6 @@
 import { userConstants } from '../consatants';
 
-const {
-  FETCH_USER, SAVE_USER, LOGIN_USER,
-} = userConstants;
+const { FETCH_USER, SAVE_USER, LOGOUT_USER } = userConstants;
 const initialState = {
   isPending: false,
   isFulfilled: false,
@@ -18,7 +16,6 @@ export default function users(state = initialState, action) {
         isPending: true,
       };
     case `${SAVE_USER}_FULFILLED`:
-      console.log('reducer fulfilled payload ', action.payload);
       return {
         ...state,
         isFulfilled: true,
@@ -49,6 +46,27 @@ export default function users(state = initialState, action) {
       };
 
     case `${FETCH_USER}_REJECTED`:
+      return {
+        ...state,
+        isFulfilled: false,
+        isPending: false,
+        isError: true,
+      };
+    case `${LOGOUT_USER}_PENDING`:
+      return {
+        ...state,
+        isFulfilled: false,
+        isPending: true,
+      };
+    case `${LOGOUT_USER}_FULFILLED`:
+      return {
+        ...state,
+        isFulfilled: true,
+        isPending: false,
+        data: {},
+      };
+
+    case `${LOGOUT_USER}_REJECTED`:
       return {
         ...state,
         isFulfilled: false,

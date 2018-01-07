@@ -1,6 +1,7 @@
 import Moment from 'moment/moment';
-import { eventsConstants } from '../consatants';
+
 import { auth, fireDB } from '../utils/fire';
+import { authActions } from '../actions';
 
 // Sign Up
 function createUserWithEmailAndPassword(email, password) {
@@ -13,8 +14,9 @@ function signInWithEmailAndPassword(email, password) {
 }
 // Sign out
 function signOut() {
-  auth.signOut();
+  return auth.signOut();
 }
+
 // Password Reset
 function resetPassword(email) {
   auth.sendPasswordResetEmail(email);

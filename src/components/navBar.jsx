@@ -35,7 +35,6 @@ const NavigationNonAuth = () =>
     <ul className="nav navbar-nav">
       <li><Link to={routesConstants.LOGIN_PAGE}>Login</Link></li>
       <li><Link to={routesConstants.LANDING}>Landing</Link></li>
-      <li><SignOutButton /></li>
     </ul>
   );
 

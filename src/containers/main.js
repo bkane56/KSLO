@@ -50,20 +50,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);
-// onSubmit(event) {
-//   const {
-//     username,
-//     email,
-//     passwordOne,
-//   } = this.state;
-//
-//   firebaseService.createUserWithEmailAndPassword(email, passwordOne)
-//     .then((authUser) => {
-//       this.setState(() => ({ ...INITIAL_STATE }));
-//     })
-//     .catch((error) => {
-//       this.setState(byPropKey('error', error));
-//     });
-//
-//   event.preventDefault();
-// }

@@ -7,9 +7,6 @@ import { App } from './app/App';
 
 require('./style/index.css');
 
-// setup fake backend
-configureFakeBackend();
-
 render(
   <Provider store={store}>
     <App />

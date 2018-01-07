@@ -1,7 +1,9 @@
 import { userConstants } from '../consatants';
 import { firebaseService } from '../services';
 
-import { history } from '../helpers';
+const {
+  LOGIN_USER, LOGOUT_USER, REGISTER_USER, FETCH_USER, SAVE_USER
+} = userConstants;
 
 export const userActions = {
   loginUser,
@@ -15,32 +17,35 @@ export const userActions = {
 
 function loginUser(email, password) {
   return {
-    type: userConstants.LOGIN_USER,
+    type: LOGIN_USER,
     payload: firebaseService.signInWithEmailAndPassword(email, password),
   };
 }
 
 function logoutUser() {
-  return { type: userConstants.LOGOUT };
+  return {
+    type: LOGOUT_USER,
+    payload: firebaseService.signOut(),
+  };
 }
 
 function registerUser(email, password) {
   return {
-    type: userConstants.REGISTER_USER,
+    type: REGISTER_USER,
     payload: firebaseService.createUserWithEmailAndPassword(email, password),
   };
 }
 
 function getUser(userId) {
   return {
-    type: userConstants.FETCH_USER,
+    type: FETCH_USER,
     payload: firebaseService.getUser(userId),
   }
 }
 function saveUser(user, userId) {
   console.log('saved user at user.actions ', user);
   return {
-    type: userConstants.SAVE_USER,
+    type:SAVE_USER,
     payload: firebaseService.saveUser(user, userId),
   };
 }

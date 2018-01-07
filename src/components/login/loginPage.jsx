@@ -7,7 +7,7 @@ import { auth } from '../../utils/fire';
 import '../../style/style.css';
 import { history } from '../../helpers';
 import { routesConstants } from '../../consatants';
-import { userActions } from '../../actions';
+import {authActions, userActions} from '../../actions';
 
 const INITIAL_STATE = {
   email: '',
@@ -52,6 +52,7 @@ class LoginPage extends React.Component {
     event.preventDefault();
     auth.signInWithEmailAndPassword(email, password)
       .then(() => {
+        this.props.addAuth(auth.currentUser)
         this.setState(() => ({ ...INITIAL_STATE }));
         history.push(routesConstants.MAIN);
       }).catch((error) => {
@@ -105,7 +106,8 @@ class LoginPage extends React.Component {
 
 function mapDispatchToProps(dispatch) {
   const { getUser } = userActions;
-  return bindActionCreators({ getUser }, dispatch);
+  const { addAuth } = authActions;
+  return bindActionCreators({ getUser, addAuth }, dispatch);
 }
 const connectedLoginPage = connect(null, mapDispatchToProps)(LoginPage);
 export { connectedLoginPage as LoginPage };
