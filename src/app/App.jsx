@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route } from 'react-router-dom';
+import { Router, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { history } from '../helpers';
 
@@ -13,20 +13,21 @@ import Account from '../components/account';
 import { routesConstants } from '../consatants';
 import { auth } from '../utils/fire';
 
+function AuthenticatedRoute({ component: Component, isAuthenticated, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={props => (isAuthenticated === true
+        ? <Component {...props} {...rest} />
+        : <Redirect to={{ pathname: 'loginPage', state: { redirectLocation: props.location } }} />)}
+    />
+  );
+}
+
+
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      authUser: false,
-    };
-  }
-  componentDidMount() {
-    auth.onAuthStateChanged((authUser) => {
-      this.setState(() => ({ authUser }));
-    });
-  }
   render() {
-    const { flightCategory } = this.props;
+    const { flightCategory, isAuthenticated } = this.props;
     const appClass = `App ${flightCategory}`;
     return (
       <div className={appClass}>
@@ -34,7 +35,7 @@ class App extends React.Component {
           <div className="col-sm-10 col-sm-offset-1">
             <Router history={history} >
               <div>
-                <NavBar authUser={this.state.authUser} />
+                <NavBar authUser={isAuthenticated} />
                 <hr />
                 <Route
                   exact
@@ -51,19 +52,22 @@ class App extends React.Component {
                   path={routesConstants.LOGIN_PAGE}
                   component={() => <LoginPage />}
                 />
-                <Route
+                <AuthenticatedRoute
                   exact
                   path={routesConstants.FORGOT_PASSWORD}
+                  isAuthenticated={isAuthenticated}
                   component={() => <ForgotPassword />}
                 />
-                <Route
+                <AuthenticatedRoute
                   exact
                   path={routesConstants.MAIN}
+                  isAuthenticated={isAuthenticated}
                   component={() => <Main />}
                 />
-                <Route
+                <AuthenticatedRoute
                   exact
                   path={routesConstants.ACCOUNT}
+                  isAuthenticated={isAuthenticated}
                   component={() => <Account />}
                 />
               </div>
@@ -78,8 +82,8 @@ class App extends React.Component {
 function mapStateToProps(state) {
   const { alert } = state;
   const flightCategory = state.metar.data[0].flight_category;
-  const aUser = null;
-  return { alert, flightCategory, aUser };
+  const isAuthenticated = state.authentication.isAuthenticated;
+  return { alert, flightCategory, isAuthenticated };
 }
 const connectedApp = connect(mapStateToProps)(App);
 export { connectedApp as App };

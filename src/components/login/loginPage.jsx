@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -7,7 +7,7 @@ import { auth } from '../../utils/fire';
 import '../../style/style.css';
 import { history } from '../../helpers';
 import { routesConstants } from '../../consatants';
-import {authActions, userActions} from '../../actions';
+import { authActions, userActions } from '../../actions';
 
 const INITIAL_STATE = {
   email: '',
@@ -52,9 +52,8 @@ class LoginPage extends React.Component {
     event.preventDefault();
     auth.signInWithEmailAndPassword(email, password)
       .then(() => {
-        this.props.addAuth(auth.currentUser)
+        this.props.addAuth(auth.currentUser);
         this.setState(() => ({ ...INITIAL_STATE }));
-        history.push(routesConstants.MAIN);
       }).catch((error) => {
         this.setState(this.handleChange('error', error));
       });
@@ -62,6 +61,12 @@ class LoginPage extends React.Component {
 
   render() {
     const { email, password, submitted } = this.state;
+    const { isAuthenticated } = this.props;
+    const { redirectLocation } = this.props.location ||
+          { redirectLocation: { pathname: routesConstants.MAIN } };
+    if (isAuthenticated) {
+      return <Redirect to={redirectLocation} />;
+    }
     return (
       <div className="col-md-6 col-md-offset-3">
         <h2>Login</h2>
@@ -109,5 +114,10 @@ function mapDispatchToProps(dispatch) {
   const { addAuth } = authActions;
   return bindActionCreators({ getUser, addAuth }, dispatch);
 }
-const connectedLoginPage = connect(null, mapDispatchToProps)(LoginPage);
+
+function mapStateToProps(state) {
+  const { isAuthenticated } = state.authentication;
+  return { isAuthenticated };
+}
+const connectedLoginPage = connect(mapStateToProps, mapDispatchToProps)(LoginPage);
 export { connectedLoginPage as LoginPage };

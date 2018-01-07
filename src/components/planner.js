@@ -13,6 +13,8 @@ import { compileEventList } from '../utils/eventUtils';
 import { Events } from '../resources/events';
 import { eventActions, userActions } from '../actions';
 import { auth } from '../utils/fire';
+import { routesConstants } from '../consatants';
+import { history } from '../helpers';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
 
@@ -42,15 +44,16 @@ class Planner extends Component {
   }
 
   componentWillMount() {
-    this.props.getEvents('N4SW');
   }
 
   componentDidMount() {
-
-    if (auth.currentUser) {
+    // if (auth.currentUser) {
       const userID = auth.currentUser.uid;
       this.props.getUser(userID);
-    }
+      this.props.getEvents('N4SW');
+    // } else {
+    //   history.push(routesConstants.LOGIN_PAGE);
+    // }
   }
 
   handleSetEventColor() {
