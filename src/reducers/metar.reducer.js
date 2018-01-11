@@ -69,6 +69,8 @@ export default function metar(state = defaultMetarState, action) {
       };
 
     case metarConstants.FETCH_METAR_FULFILLED:
+      console.log('Metar data: ', action.payload.data.data)
+
       return {
         ...state,
         isFulfilled: true,

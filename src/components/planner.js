@@ -9,14 +9,13 @@ import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
 import HeaderMetar from '../components/headerMetar';
 import '../style/App.css';
 import '../style/calendar.css';
+import { calculateDensityAltitude } from '../utils/metarUtils';
 import { compileEventList } from '../utils/eventUtils';
-import { Events } from '../resources/events';
 import { eventActions, userActions } from '../actions';
-import { auth } from '../utils/fire';
-import { routesConstants } from '../consatants';
-import { history } from '../helpers';
+import { auth, fireDB } from '../utils/fire';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
+const N_NUMBER = 'N4SW';
 
 class Planner extends Component {
   static getCurrentDate() {
@@ -38,22 +37,13 @@ class Planner extends Component {
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
     this.handleSetEventColor = this.handleSetEventColor.bind(this);
     this.addLocalSlot = this.addLocalSlot.bind(this);
-    // this.state = {
-    //   events: Events,
-    // };
-  }
-
-  componentWillMount() {
+    this.upDateNow = this.upDateNow.bind(this);
   }
 
   componentDidMount() {
-    // if (auth.currentUser) {
-      const userID = auth.currentUser.uid;
-      this.props.getUser(userID);
-      this.props.getEvents('N4SW');
-    // } else {
-    //   history.push(routesConstants.LOGIN_PAGE);
-    // }
+    const userID = auth.currentUser.uid;
+    this.props.getUser(userID);
+    this.props.getEvents(N_NUMBER);
   }
 
   handleSetEventColor() {
@@ -63,6 +53,10 @@ class Planner extends Component {
     return 'test-class';
   }
 
+  upDateNow() {
+    this.forceUpdate();
+  }
+
   addLocalSlot({ start, end }) {
     this.state.events.push({
       start,
@@ -70,7 +64,6 @@ class Planner extends Component {
       title: this.props.name,
       desc: 'quick trip around',
     });
-    this.setState({});
   }
 
   handleSelectEvent() {
@@ -80,26 +73,28 @@ class Planner extends Component {
 
   handleSelectSlot(slot) {
     const eventStart = Moment(slot.start).format();
-    const nNumber = 'N4SW';
-    if (Moment(eventStart).isAfter(Moment() && this.props.isAllowedToSchedule)) {
+    if (Moment(eventStart).isAfter(Moment()) && this.props.isAllowedToSchedule) {
       const title = this.props.username;
       const desc = 'solo';
-      this.props.addEvents(slot, title, desc, nNumber);
-      // this.addLocalSlot(start, end);
+      this.props.addEvents(slot, title, desc, N_NUMBER);
+      this.props.getEvents(N_NUMBER);
     }
   }
 
   render() {
-    const { metar, flightCategory, eventList } = this.props;
+    console.log('N_NUMBER: ', N_NUMBER);
+    const {
+      metarRawText, flightCategory, densityAlt, eventList,
+    } = this.props;
     const events = compileEventList(eventList);
     const minDate = new Date('2017, 1, 7, 06:00');
     const maxDate = new Date('2017, 1, 7, 23:59');
-    const appClass = `App ${flightCategory}`;
     return (
       <div>
         <HeaderMetar
-          metar={metar}
+          metarRawText={metarRawText}
           flightCategory={flightCategory}
+          densityAlt={densityAlt}
         />
         <div className="Calendar transparent">
           <Notifications />
@@ -129,37 +124,44 @@ class Planner extends Component {
 }
 
 Planner.defaultProps = {
-  metar: '',
+  metarRawText: '',
   flightCategory: '',
+  densityAlt: 0,
   name: '',
   cfiRequired: true,
   addEvents() {},
   getEvents() {},
+  setEvents() {},
 };
 
 Planner.propTypes = {
-  metar: PropTypes.string,
+  metarRawText: PropTypes.string,
   flightCategory: PropTypes.string,
   name: PropTypes.string,
   cfiRequired: PropTypes.bool,
+  densityAlt: PropTypes.number,
   addEvents: PropTypes.func,
   getEvents: PropTypes.func,
+  setEvents: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {
   const { getEvents, addEvents } = eventActions;
   const { getUser } = userActions;
-  return bindActionCreators({ getEvents, addEvents, getUser }, dispatch);
+  return bindActionCreators({
+    getEvents, addEvents, getUser,
+  }, dispatch);
 }
 
 function mapStateToProps(state) {
   const flightCategory = state.metar.data[0].flight_category;
-  const metar = state.metar.data[0].raw_text;
+  const metarRawText = state.metar.data[0].raw_text;
   const eventList = state.events.events;
+  const densityAlt = calculateDensityAltitude(state.metar.data[0]);
   const { cfiRequired, isAllowedToSchedule, username } = state.users.data;
 
   return {
-    flightCategory, metar, eventList, cfiRequired, isAllowedToSchedule, username,
+    flightCategory, metarRawText, eventList, densityAlt, cfiRequired, isAllowedToSchedule, username,
   };
 }
 

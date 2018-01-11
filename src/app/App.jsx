@@ -28,7 +28,11 @@ function AuthenticatedRoute({ component: Component, isAuthenticated, ...rest }) 
 class App extends React.Component {
   render() {
     const { flightCategory, isAuthenticated } = this.props;
-    const appClass = `App ${flightCategory}`;
+    let category = flightCategory;
+    if (category === 'LIFR') {
+      category = 'IFR';
+    }
+    const appClass = `App ${category}`;
     return (
       <div className={appClass}>
         <div className="container">

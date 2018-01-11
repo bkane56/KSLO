@@ -44,7 +44,6 @@ class LoginPage extends React.Component {
   }
 
   handleSubmit(event) {
-    this.setState({ submitted: true });
     const {
       email,
       password,
@@ -57,6 +56,7 @@ class LoginPage extends React.Component {
       }).catch((error) => {
         this.setState(this.handleChange('error', error));
       });
+    this.setState({ submitted: true });
   }
 
   render() {

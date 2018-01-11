@@ -4,9 +4,7 @@ import { eventsServices, firebaseService } from '../services';
 function getEvents(nNumber) {
   return {
     type: eventsConstants.FETCH_EVENTS,
-    payload: {
-      promise: firebaseService.getEvents(nNumber),
-    },
+    payload:  firebaseService.getEvents(nNumber),
   };
 }
 

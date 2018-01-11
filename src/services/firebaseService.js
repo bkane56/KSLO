@@ -42,7 +42,6 @@ function saveEvent(slot, title, desc, nNumber) {
 }
 // save user data to firebase
 function saveUser(user, userId) {
-  console.log('saved user in fireservice ', user);
   return fireDB.database().ref(`/users/${userId}`).push({
     user,
   }).then(() => user);
