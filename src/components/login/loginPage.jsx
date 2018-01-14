@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -15,7 +15,7 @@ const INITIAL_STATE = {
   error: null,
   submitted: false,
 };
-class LoginPage extends React.Component {
+class LoginPage extends Component {
   constructor(props) {
     super(props);
 

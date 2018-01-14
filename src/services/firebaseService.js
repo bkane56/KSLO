@@ -1,7 +1,7 @@
 import Moment from 'moment/moment';
 
 import { auth, fireDB } from '../utils/fire';
-import { authActions } from '../actions';
+import { authActions, eventActions } from '../actions';
 
 // Sign Up
 function createUserWithEmailAndPassword(email, password) {
@@ -26,7 +26,7 @@ function updatePassword(password) {
   auth.currentUser.updatePassword(password);
 }
 // getEvents data from firebase database
-function getEvents(nNumber) {
+function fetchEvents(nNumber) {
   const ref = fireDB.database().ref(`/events/${nNumber}`);
   return ref.once('value').then(snapshot => Object.values(snapshot.val()));
 }
@@ -38,6 +38,12 @@ function saveEvent(slot, title, desc, nNumber) {
     allDay: false,
     title,
     desc,
+  });
+}
+function addListenersForEvents(nNumber) {
+  const ref = fireDB.database().ref(`/events/${nNumber}`);
+  ref.on('child_added', (snapshot) => {
+    eventActions.addEventsFromFirebase(snapshot.val());
   });
 }
 // save user data to firebase
@@ -59,7 +65,8 @@ export const firebaseService = {
   resetPassword,
   updatePassword,
   saveEvent,
-  getEvents,
+  fetchEvents,
+  addListenersForEvents,
   saveUser,
   getUser,
 };

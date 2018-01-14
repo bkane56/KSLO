@@ -6,17 +6,19 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Notifications, { notify } from 'react-notify-toast';
 import BigCalendarCSS from 'react-big-calendar/lib/css/react-big-calendar.css';
-import HeaderMetar from '../components/headerMetar';
+
+import DisplayModal from './displayModal';
+import HeaderMetar from './headerMetar';
 import '../style/App.css';
 import '../style/calendar.css';
 import { calculateDensityAltitude } from '../utils/metarUtils';
-import { compileEventList } from '../utils/eventUtils';
+import { eventUtils } from '../utils';
 import { eventActions, userActions } from '../actions';
-import { auth, fireDB } from '../utils/fire';
+import { auth } from '../utils/fire';
+import { firebaseService } from '../services';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(Moment));
 const N_NUMBER = 'N4SW';
-
 class Planner extends Component {
   static getCurrentDate() {
     return Moment().format('YYYY,MM,DD');
@@ -29,6 +31,10 @@ class Planner extends Component {
   static EventAgenda(props) {
     return <em>{props.event.title}</em>;
   }
+  state = {
+    openFirstModal: false,
+    openSecondModal: false,
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -37,13 +43,26 @@ class Planner extends Component {
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
     this.handleSetEventColor = this.handleSetEventColor.bind(this);
     this.addLocalSlot = this.addLocalSlot.bind(this);
-    this.upDateNow = this.upDateNow.bind(this);
+    this.toggleFirstModal = this.toggleFirstModal.bind(this);
   }
 
   componentDidMount() {
     const userID = auth.currentUser.uid;
     this.props.getUser(userID);
     this.props.getEvents(N_NUMBER);
+    // firebaseService.addListenersForEvents(N_NUMBER);
+  }
+
+  toggleFirstModal() {
+    this.setState({
+      openFirstModal: !this.state.openFirstModal,
+    });
+  }
+
+  toggleSecondModal() {
+    this.setState({
+      openSecondModal: !this.state.openSecondModal,
+    });
   }
 
   handleSetEventColor() {
@@ -51,10 +70,6 @@ class Planner extends Component {
       return 'cfiRequired';
     }
     return 'test-class';
-  }
-
-  upDateNow() {
-    this.forceUpdate();
   }
 
   addLocalSlot({ start, end }) {
@@ -72,23 +87,25 @@ class Planner extends Component {
   }
 
   handleSelectSlot(slot) {
+    this.toggleFirstModal();
     const eventStart = Moment(slot.start).format();
     if (Moment(eventStart).isAfter(Moment()) && this.props.isAllowedToSchedule) {
       const title = this.props.username;
       const desc = 'solo';
-      this.props.addEvents(slot, title, desc, N_NUMBER);
-      this.props.getEvents(N_NUMBER);
+      // this.props.addEvents(slot, title, desc, N_NUMBER);
+      // this.props.getEvents(N_NUMBER);
     }
   }
 
   render() {
-    console.log('N_NUMBER: ', N_NUMBER);
+    const { openFirstModal, openSecondModal } = this.state;
     const {
       metarRawText, flightCategory, densityAlt, eventList,
     } = this.props;
-    const events = compileEventList(eventList);
+    const events = eventUtils.compileEventList(eventList);
     const minDate = new Date('2017, 1, 7, 06:00');
     const maxDate = new Date('2017, 1, 7, 23:59');
+    const showModal = (openFirstModal) ? <DisplayModal onClose={this.toggleFirstModal} /> : null;
     return (
       <div>
         <HeaderMetar
@@ -96,6 +113,9 @@ class Planner extends Component {
           flightCategory={flightCategory}
           densityAlt={densityAlt}
         />
+        <div>
+          {showModal}
+        </div>
         <div className="Calendar transparent">
           <Notifications />
           <BigCalendar
@@ -131,7 +151,6 @@ Planner.defaultProps = {
   cfiRequired: true,
   addEvents() {},
   getEvents() {},
-  setEvents() {},
 };
 
 Planner.propTypes = {
@@ -142,12 +161,12 @@ Planner.propTypes = {
   densityAlt: PropTypes.number,
   addEvents: PropTypes.func,
   getEvents: PropTypes.func,
-  setEvents: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {
   const { getEvents, addEvents } = eventActions;
   const { getUser } = userActions;
+
   return bindActionCreators({
     getEvents, addEvents, getUser,
   }, dispatch);

@@ -1,5 +1,6 @@
 import { eventsConstants } from '../consatants';
 
+const { ADD_EVENTS_FROM_FIREBASE, FETCH_EVENTS, ADD_EVENTS } = eventsConstants;
 const initialState = {
   isPending: false,
   isFulfilled: false,
@@ -8,15 +9,16 @@ const initialState = {
 };
 
 export default function events(state = initialState, action) {
+  console.log('action into reducer', action)
   switch (action.type) {
-    case eventsConstants.FETCH_EVENTS_PENDING:
+    case `${FETCH_EVENTS}_PENDING`:
       return {
         ...state,
         isFulfilled: false,
         isPending: true,
       };
 
-    case eventsConstants.FETCH_EVENTS_FULFILLED:
+    case `${FETCH_EVENTS}_FULFILLED`:
       return {
         ...state,
         isFulfilled: true,
@@ -24,8 +26,7 @@ export default function events(state = initialState, action) {
         events: action.payload,
       };
 
-    case eventsConstants.FETCH_EVENTS_REJECTED:
-      console.log('reducer', action.payload);
+    case `${FETCH_EVENTS}_REJECTED`:
       return {
         ...state,
         isFulfilled: false,
@@ -33,26 +34,48 @@ export default function events(state = initialState, action) {
         isError: true,
       };
 
-    case eventsConstants.ADD_EVENTS_PENDING:
+    case `${ADD_EVENTS}_PENDING`:
       return {
         ...state,
         isFulfilled: false,
         isPending: true,
       };
 
-    case eventsConstants.ADD_EVENTS_FULFILLED:
+    case `${ADD_EVENTS}_FULFILLED`:
       return {
         ...state,
         isFulfilled: true,
         isPending: false,
       };
 
-    case eventsConstants.ADD_EVENTS_REJECTED:
+    case `${ADD_EVENTS}_REJECTED`:
       return {
         isFulfilled: false,
         isPending: false,
         isError: true,
         state,
+      };
+    case `${ADD_EVENTS_FROM_FIREBASE}_PENDING`:
+      return {
+        ...state,
+        isFulfilled: true,
+        isPending: false,
+      };
+
+    case ADD_EVENTS_FROM_FIREBASE:
+      console.table(action.payload)
+      return {
+        ...state,
+        isFulfilled: true,
+        isPending: false,
+        events: action.payload,
+      };
+
+    case `${ADD_EVENTS_FROM_FIREBASE}_REJECTED`:
+      return {
+        ...state,
+        isFulfilled: true,
+        isPending: false,
       };
 
     case eventsConstants.DELETE_EVENT:
