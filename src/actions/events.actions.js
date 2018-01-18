@@ -1,12 +1,19 @@
 import { eventsConstants } from '../consatants';
-import { eventsServices, firebaseService } from '../services';
+import { firebaseService } from '../services';
+import { fireDB } from '../utils/fire';
 
 function getEvents(nNumber) {
-  return {
-    type: eventsConstants.FETCH_EVENTS,
-    payload: firebaseService.fetchEvents(nNumber),
+  const ref = fireDB.database().ref(`/events/${nNumber}`);
+  return (dispatch) => {
+    ref.on('value', (snapshot) => {
+      dispatch({
+        type: eventsConstants.FETCH_EVENTS,
+        payload: snapshot.val(),
+      });
+    });
   };
 }
+
 
 function addEvents(slot, title, desc, nNumber) {
   return {
@@ -15,10 +22,10 @@ function addEvents(slot, title, desc, nNumber) {
   };
 }
 
-function addEventsFromFirebase(eventList) {
+function addEventsFromFirebase(nNumber) {
   return {
     type: eventsConstants.ADD_EVENTS_FROM_FIREBASE,
-    payload: new Promise(resolve => {eventList}  ),
+    payload: firebaseService.addListenersForEvents(nNumber),
   };
 }
 

@@ -42,7 +42,6 @@ class Planner extends Component {
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.handleSelectEvent = this.handleSelectEvent.bind(this);
     this.handleSetEventColor = this.handleSetEventColor.bind(this);
-    this.addLocalSlot = this.addLocalSlot.bind(this);
     this.toggleFirstModal = this.toggleFirstModal.bind(this);
   }
 
@@ -50,7 +49,7 @@ class Planner extends Component {
     const userID = auth.currentUser.uid;
     this.props.getUser(userID);
     this.props.getEvents(N_NUMBER);
-    // firebaseService.addListenersForEvents(N_NUMBER);
+    // this.props.addEventsFromFirebase(N_NUMBER);
   }
 
   toggleFirstModal() {
@@ -72,36 +71,27 @@ class Planner extends Component {
     return 'test-class';
   }
 
-  addLocalSlot({ start, end }) {
-    this.state.events.push({
-      start,
-      end,
-      title: this.props.name,
-      desc: 'quick trip around',
-    });
-  }
-
-  handleSelectEvent() {
+  handleSelectEvent(props) {
     const myColor = { background: '#252885', text: '#2678FF' };
-    notify.show(this.props.name, 'custom', 5000, myColor);
+    notify.show(props.index, 'custom', 5000, myColor);
   }
 
   handleSelectSlot(slot) {
-    this.toggleFirstModal();
     const eventStart = Moment(slot.start).format();
     if (Moment(eventStart).isAfter(Moment()) && this.props.isAllowedToSchedule) {
       const title = this.props.username;
       const desc = 'solo';
-      // this.props.addEvents(slot, title, desc, N_NUMBER);
-      // this.props.getEvents(N_NUMBER);
+      this.toggleFirstModal();
+      this.props.addEvents(slot, title, desc, N_NUMBER);
     }
   }
 
   render() {
     const { openFirstModal, openSecondModal } = this.state;
     const {
-      metarRawText, flightCategory, densityAlt, eventList,
+      metarRawText, flightCategory, densityAlt, eventList, isAllowedToSchedule,
     } = this.props;
+    const isSelectable = isAllowedToSchedule? "ignoreEvents" : false;
     const events = eventUtils.compileEventList(eventList);
     const minDate = new Date('2017, 1, 7, 06:00');
     const maxDate = new Date('2017, 1, 7, 23:59');
@@ -119,14 +109,14 @@ class Planner extends Component {
         <div className="Calendar transparent">
           <Notifications />
           <BigCalendar
-            selectable
+            selectable={isSelectable}
             popup
             events={events}
             onSelectSlot={slot => this.handleSelectSlot(slot)}
-            onSelectEvent={this.handleSelectEvent}
+            onSelectEvent={event => this.handleSelectEvent(event)}
             min={minDate}
             max={maxDate}
-            views={['month', 'week', 'day']}
+            views={['month', 'week', 'day', 'agenda']}
             defaultView="week"
             defaultDate={new Date(Planner.getCurrentDate())}
             eventPropGetter={e => ({ className: 'test-class' })} /* Here you can define a style for the element */
@@ -164,11 +154,11 @@ Planner.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  const { getEvents, addEvents } = eventActions;
+  const { getEvents, addEvents, addEventsFromFirebase } = eventActions;
   const { getUser } = userActions;
 
   return bindActionCreators({
-    getEvents, addEvents, getUser,
+    getEvents, addEvents, getUser, addEventsFromFirebase
   }, dispatch);
 }
 

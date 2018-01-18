@@ -11,14 +11,14 @@ const initialState = {
 export default function events(state = initialState, action) {
   console.log('action into reducer', action)
   switch (action.type) {
-    case `${FETCH_EVENTS}_PENDING`:
-      return {
-        ...state,
-        isFulfilled: false,
-        isPending: true,
-      };
+    // case `${FETCH_EVENTS}_PENDING`:
+    //   return {
+    //     ...state,
+    //     isFulfilled: false,
+    //     isPending: true,
+    //   };
 
-    case `${FETCH_EVENTS}_FULFILLED`:
+    case FETCH_EVENTS:
       return {
         ...state,
         isFulfilled: true,
@@ -26,13 +26,13 @@ export default function events(state = initialState, action) {
         events: action.payload,
       };
 
-    case `${FETCH_EVENTS}_REJECTED`:
-      return {
-        ...state,
-        isFulfilled: false,
-        isPending: false,
-        isError: true,
-      };
+    // case `${FETCH_EVENTS}_REJECTED`:
+    //   return {
+    //     ...state,
+    //     isFulfilled: false,
+    //     isPending: false,
+    //     isError: true,
+    //   };
 
     case `${ADD_EVENTS}_PENDING`:
       return {
@@ -62,7 +62,7 @@ export default function events(state = initialState, action) {
         isPending: false,
       };
 
-    case ADD_EVENTS_FROM_FIREBASE:
+    case `${ADD_EVENTS_FROM_FIREBASE}_FULFILLED`:
       console.table(action.payload)
       return {
         ...state,

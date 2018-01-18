@@ -86,7 +86,7 @@ class App extends React.Component {
 function mapStateToProps(state) {
   const { alert } = state;
   const flightCategory = state.metar.data[0].flight_category;
-  const isAuthenticated = state.authentication.isAuthenticated;
+  const { isAuthenticated } = state.authentication;
   return { alert, flightCategory, isAuthenticated };
 }
 const connectedApp = connect(mapStateToProps)(App);

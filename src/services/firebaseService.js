@@ -40,11 +40,15 @@ function saveEvent(slot, title, desc, nNumber) {
     desc,
   });
 }
+
 function addListenersForEvents(nNumber) {
   const ref = fireDB.database().ref(`/events/${nNumber}`);
-  ref.on('child_added', (snapshot) => {
-    eventActions.addEventsFromFirebase(snapshot.val());
-  });
+  ref.on('value', snapshot => new Promise((resolve) => {
+    resolve(snapshot.val());
+    // }).then((resp) => {
+    //   return resp;
+    // });
+  }));
 }
 // save user data to firebase
 function saveUser(user, userId) {
