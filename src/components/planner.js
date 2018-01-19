@@ -95,7 +95,10 @@ class Planner extends Component {
     const events = eventUtils.compileEventList(eventList);
     const minDate = new Date('2017, 1, 7, 06:00');
     const maxDate = new Date('2017, 1, 7, 23:59');
-    const showModal = (openFirstModal) ? <DisplayModal onClose={this.toggleFirstModal} /> : null;
+    const showModal = (openFirstModal) ?
+      <DisplayModal
+        onClose={this.toggleFirstModal}
+      /> : null;
     return (
       <div>
         <HeaderMetar
