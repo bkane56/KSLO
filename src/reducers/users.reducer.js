@@ -20,7 +20,7 @@ export default function users(state = initialState, action) {
         ...state,
         isFulfilled: true,
         isPending: false,
-        user: action.payload,
+        user: action.payload.user,
       };
 
     case `${SAVE_USER}_REJECTED`:
@@ -42,7 +42,7 @@ export default function users(state = initialState, action) {
         ...state,
         isFulfilled: true,
         isPending: false,
-        data: action.payload,
+        data: action.payload.user,
       };
 
     case `${FETCH_USER}_REJECTED`:

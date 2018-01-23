@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 
 import { auth } from '../../utils/fire';
 import '../../style/style.css';
-import { history } from '../../helpers';
 import { routesConstants } from '../../consatants';
 import { authActions, userActions } from '../../actions';
 

@@ -43,9 +43,8 @@ function getUser(userId) {
   }
 }
 function saveUser(user, userId) {
-  console.log('saved user at user.actions ', user);
   return {
-    type:SAVE_USER,
+    type: SAVE_USER,
     payload: firebaseService.saveUser(user, userId),
   };
 }

@@ -9,7 +9,6 @@ const initialState = {
 };
 
 export default function events(state = initialState, action) {
-  console.log('action into reducer', action)
   switch (action.type) {
     // case `${FETCH_EVENTS}_PENDING`:
     //   return {

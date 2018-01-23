@@ -34,6 +34,7 @@ class Planner extends Component {
   state = {
     openFirstModal: false,
     openSecondModal: false,
+    slot: null,
   };
 
   constructor(props, context) {
@@ -77,14 +78,23 @@ class Planner extends Component {
   }
 
   handleSelectSlot(slot) {
+    const timeFromat = 'ddd MMM D HH:mm zz';
     const eventStart = Moment(slot.start).format();
     if (Moment(eventStart).isAfter(Moment()) && this.props.isAllowedToSchedule) {
-      const title = this.props.username;
-      const desc = 'solo';
+      this.state.slot = slot;
       this.toggleFirstModal();
-      this.props.addEvents(slot, title, desc, N_NUMBER);
     }
   }
+
+  showModal = (props) => {
+    return <DisplayModal
+      onClose={this.toggleFirstModal}
+      title={this.props.username}
+      nNumber={N_NUMBER}
+      slot={this.state.slot}
+    />
+  };
+
 
   render() {
     const { openFirstModal, openSecondModal } = this.state;
@@ -95,10 +105,7 @@ class Planner extends Component {
     const events = eventUtils.compileEventList(eventList);
     const minDate = new Date('2017, 1, 7, 06:00');
     const maxDate = new Date('2017, 1, 7, 23:59');
-    const showModal = (openFirstModal) ?
-      <DisplayModal
-        onClose={this.toggleFirstModal}
-      /> : null;
+    const showModal = (openFirstModal) ? this.showModal(this.state.slot) : null;
     return (
       <div>
         <HeaderMetar
@@ -107,7 +114,7 @@ class Planner extends Component {
           densityAlt={densityAlt}
         />
         <div>
-          {showModal}
+          { (openFirstModal) ? this.showModal(this.state.slot) : null }
         </div>
         <div className="Calendar transparent">
           <Notifications />
@@ -172,9 +179,10 @@ function mapStateToProps(state) {
   const densityAlt = calculateDensityAltitude(state.metar.data[0]);
   const { cfiRequired, isAllowedToSchedule, username } = state.users.data;
 
-  return {
+  const stuff = {
     flightCategory, metarRawText, eventList, densityAlt, cfiRequired, isAllowedToSchedule, username,
   };
+  return stuff;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Planner);

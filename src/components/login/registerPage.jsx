@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { authActions, userActions } from '../../actions';
 import { auth } from '../../utils/fire';
 import '../../style/style.css';
+import {routesConstants} from "../../consatants";
 
 const INITIAL_STATE = {
   firstName: '',
@@ -72,6 +73,7 @@ class RegisterPage extends React.Component {
         const userID = auth.currentUser.uid;
         this.props.saveUser(savedUser, userID);
         this.props.addAuth(auth.currentUser);
+
       }).catch((error) => {
         this.setState(this.handleChange('error', error));
       });
@@ -83,7 +85,12 @@ class RegisterPage extends React.Component {
     } = this.state;
     const isInvalid = passwordOne !== passwordTwo || passwordOne === '' || passwordTwo === ''
       || email === '' || username === '' || firstName === '' || lastName === '' || email === '';
-
+    const { isAuthenticated } = this.props;
+    const { redirectLocation } = this.props.location ||
+    { redirectLocation: { pathname: routesConstants.MAIN } };
+    if (isAuthenticated) {
+      return <Redirect to={redirectLocation} />;
+    }
     return (
       <div className="col-md-6 col-md-offset-3">
         <h2>Register</h2>
@@ -202,6 +209,10 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ saveUser, addAuth }, dispatch);
 }
 
+function mapStateToProps(state) {
+  const { isAuthenticated } = state.authentication;
+  return { isAuthenticated };
+}
 
-const connectedRegisterPage = connect(null, mapDispatchToProps)(RegisterPage);
+const connectedRegisterPage = connect(mapStateToProps, mapDispatchToProps)(RegisterPage);
 export { connectedRegisterPage as RegisterPage };

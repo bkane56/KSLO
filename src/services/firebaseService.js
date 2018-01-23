@@ -32,6 +32,7 @@ function fetchEvents(nNumber) {
 }
 // save an event to firebase datatbase
 function saveEvent(slot, title, desc, nNumber) {
+  console.log(slot, title, desc, nNumber);
   fireDB.database().ref(`/events/${nNumber}`).push({
     start: Moment(slot.start).format(),
     end: Moment(slot.end).format(),
