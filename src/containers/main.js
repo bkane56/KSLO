@@ -6,7 +6,6 @@ import { metarActions } from '../actions';
 import Header from '../components/header';
 import Planner from '../components/planner';
 import '../style/App.css';
-import {firebaseService} from "../services";
 
 class Main extends Component {
   componentDidMount() {

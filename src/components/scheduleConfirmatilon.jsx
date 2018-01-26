@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { eventActions, userActions } from '../actions';
 import { routesConstants } from '../consatants';
+import '../style/App.css';
 
 class ScheduleConfirmation extends Component {
   constructor(props) {
@@ -37,10 +38,10 @@ class ScheduleConfirmation extends Component {
   };
 
   render() {
-    const timeFromat = 'ddd MMM D HH:mm zz';
+    const timeFormat = 'ddd MMM D HH:mm zz';
     const { title, nNumber } = this.props;
-    const start = Moment(this.props.slot.start).format(timeFromat);
-    const end = Moment(this.props.slot.end).format(timeFromat);
+    const start = Moment(this.props.slot.start).format(timeFormat);
+    const end = Moment(this.props.slot.end).format(timeFormat);
     return (
       <div className="col-md-6 col-md-offset-3">
         <div>
@@ -56,9 +57,8 @@ class ScheduleConfirmation extends Component {
             <h3>Description: (optional)
                 <a href="#" onClick={this.handleEditDescription}> Add Description </a>
             </h3>
-            <button onClick={this.handleClick}>
-              Confirm
-            </button>
+            <button className="button" onClick={this.handleClick}>Confirm Reservation</button>
+            <button className="button" onClick={this.handleEditDescription}>Cancel Reservation</button>
           </div>
         </div>
 
